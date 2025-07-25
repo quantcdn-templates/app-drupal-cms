@@ -1,4 +1,4 @@
-name: Build and Push Drupal to Public Registry
+name: Build and Push Drupal CMS to Public Registry
 
 on:
   push:
@@ -29,18 +29,18 @@ jobs:
           context: .
           platforms: linux/amd64
           load: true
-          tags: drupal-temp:latest
+          tags: drupal-cms-temp:latest
 
-      - name: Detect Drupal version
+      - name: Detect Drupal CMS version
         id: version
         run: |
-          # Try to get Drupal version from the built container
-          if VERSION=$(docker run --rm drupal-temp:latest drush core-status --field=drupal-version --format=string 2>/dev/null); then
-            echo "Found Drupal version: $VERSION"
+          # Try to get Drupal CMS version from the built container
+          if VERSION=$(docker run --rm drupal-cms-temp:latest drush core-status --field=drupal-version --format=string 2>/dev/null); then
+            echo "Found Drupal CMS version: $VERSION"
             echo "version=$VERSION" >> $GITHUB_OUTPUT
           else
             # Fallback: try to parse from composer.json
-            if VERSION=$(docker run --rm drupal-temp:latest php -r "
+            if VERSION=$(docker run --rm drupal-cms-temp:latest php -r "
               \$composer = json_decode(file_get_contents('/opt/drupal/composer.json'), true);
               if (isset(\$composer['require']['drupal/core-recommended'])) {
                 echo preg_replace('/[^0-9.]/', '', \$composer['require']['drupal/core-recommended']);
@@ -48,10 +48,10 @@ jobs:
                 echo preg_replace('/[^0-9.]/', '', \$composer['require']['drupal/core']);
               }
             " 2>/dev/null); then
-              echo "Found Drupal version from composer: $VERSION"
+              echo "Found Drupal CMS version from composer: $VERSION"
               echo "version=$VERSION" >> $GITHUB_OUTPUT
             else
-              echo "Could not detect Drupal version, using 'latest'"
+              echo "Could not detect Drupal CMS version, using 'latest'"
               echo "version=latest" >> $GITHUB_OUTPUT
             fi
           fi
@@ -62,15 +62,15 @@ jobs:
           if [[ $GITHUB_REF == refs/heads/develop ]]; then
             # Develop branch gets dev/edge tags
             echo "tags<<EOF" >> $GITHUB_OUTPUT
-            echo "ghcr.io/quantcdn-templates/app-drupal:dev" >> $GITHUB_OUTPUT
-            echo "ghcr.io/quantcdn-templates/app-drupal:edge" >> $GITHUB_OUTPUT
-            echo "ghcr.io/quantcdn-templates/app-drupal:v${{ steps.version.outputs.version }}-dev" >> $GITHUB_OUTPUT
+            echo "ghcr.io/quantcdn-templates/app-drupal-cms:dev" >> $GITHUB_OUTPUT
+            echo "ghcr.io/quantcdn-templates/app-drupal-cms:edge" >> $GITHUB_OUTPUT
+            echo "ghcr.io/quantcdn-templates/app-drupal-cms:v${{ steps.version.outputs.version }}-dev" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
           else
             # Main branch gets latest and version tags
             echo "tags<<EOF" >> $GITHUB_OUTPUT
-            echo "ghcr.io/quantcdn-templates/app-drupal:latest" >> $GITHUB_OUTPUT
-            echo "ghcr.io/quantcdn-templates/app-drupal:v${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
+            echo "ghcr.io/quantcdn-templates/app-drupal-cms:latest" >> $GITHUB_OUTPUT
+            echo "ghcr.io/quantcdn-templates/app-drupal-cms:v${{ steps.version.outputs.version }}" >> $GITHUB_OUTPUT
             echo "EOF" >> $GITHUB_OUTPUT
           fi
 
@@ -90,10 +90,10 @@ jobs:
           tags: ${{ steps.tags.outputs.tags }}
           cache-from: |
             type=gha
-            type=registry,ref=ghcr.io/quantcdn-templates/app-drupal:cache
+            type=registry,ref=ghcr.io/quantcdn-templates/app-drupal-cms:cache
           cache-to: |
             type=gha,mode=max
-            type=registry,ref=ghcr.io/quantcdn-templates/app-drupal:cache,mode=max
+            type=registry,ref=ghcr.io/quantcdn-templates/app-drupal-cms:cache,mode=max
 
       - name: Test container startup
         run: |
@@ -103,7 +103,7 @@ jobs:
             -e DB_DATABASE=test \
             -e DB_USERNAME=user \
             -e DB_PASSWORD=pass \
-            ghcr.io/quantcdn-templates/app-drupal:latest || true
+            ghcr.io/quantcdn-templates/app-drupal-cms:latest || true
           
           # Check if container is running
           if docker ps | grep test-drupal; then
@@ -111,4 +111,4 @@ jobs:
             docker stop test-drupal
           else
             echo "ℹ️ Container startup test completed (database connection expected to fail in CI)"
-          fi 
+          fi

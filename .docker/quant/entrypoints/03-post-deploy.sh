@@ -7,7 +7,7 @@ if [ "$QUANT_ENVIRONMENT_TYPE" == "development" ]; then
     ##
     STATUS=$(drush status --fields=bootstrap --format=json)
 
-    # Drupal cannot be bootstrapped.
+    # Drupal CMS cannot be bootstrapped.
     # Here we perform a fresh installation, and install the required default modules.
     # We install devel_generate to create some sample content.
     if [ "$(jq -r '.bootstrap' 2> /dev/null <<< "$STATUS")" != "Successful" ]; then

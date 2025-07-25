@@ -1,4 +1,4 @@
-name: Build and Push Drupal to Quant Cloud
+name: Build and Push Drupal CMS to Quant Cloud
 
 on:
   push:
@@ -62,17 +62,17 @@ jobs:
         run: |
           echo "stripped_endpoint=$(echo '${{ steps.ecr-login.outputs.endpoint }}' | sed -E 's|^https?://||')" >> $GITHUB_OUTPUT
 
-      - name: Build and push Drupal image
+      - name: Build and push Drupal CMS image
         uses: docker/build-push-action@v5
         with:
           context: .
           platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            ${{ steps.ecr-endpoint-stripped.outputs.stripped_endpoint }}/${{ secrets.QUANT_ORGANIZATION }}/${{ secrets.QUANT_APPLICATION }}:drupal${{ steps.vars.outputs.suffix }}
+            ${{ steps.ecr-endpoint-stripped.outputs.stripped_endpoint }}/${{ secrets.QUANT_ORGANIZATION }}/${{ secrets.QUANT_APPLICATION }}:drupal-cms${{ steps.vars.outputs.suffix }}
           cache-from: |
             type=gha
-            type=registry,ref=ghcr.io/quantcdn-templates/app-drupal:cache
+            type=registry,ref=ghcr.io/quantcdn-templates/app-drupal-cms:cache
           cache-to: |
             type=gha,mode=max
 

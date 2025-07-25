@@ -1,6 +1,6 @@
 # DDEV Local Development Setup
 
-This Drupal template includes DDEV configuration for easy local development.
+This Drupal CMS template includes DDEV configuration for easy local development.
 
 ## Quick Start
 
@@ -55,4 +55,4 @@ This DDEV setup mirrors the production Docker configuration:
 - Same PHP version and extensions
 - Same environment variable names
 - Same Redis configuration (when enabled)
-- Same database settings 
+- Same database settings

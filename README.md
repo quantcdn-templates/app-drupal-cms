@@ -1,10 +1,10 @@
-# Drupal Template for Quant Cloud
+# Drupal CMS Template for Quant Cloud
 
-A production-ready Drupal template designed for deployment on Quant Cloud. This template uses a standard Drupal installation with intelligent environment variable mapping to support Quant Cloud's database configuration.
+A production-ready Drupal CMS template designed for deployment on Quant Cloud. This template uses a standard Drupal CMS installation with intelligent environment variable mapping to support Quant Cloud's database configuration.
 
 ## Features
 
-- **Drupal Latest**: Based on PHP 8.3 with all required extensions
+- **Drupal CMS Latest**: Based on PHP 8.3 with all required extensions
 - **Composer Managed**: Modern Drupal development with dependency management
 - **Quant Cloud Integration**: Maps Quant Cloud's `DB_*` variables to Drupal standards
 - **Production Ready**: Includes proper configuration, security settings, and performance optimizations
@@ -20,14 +20,14 @@ This template provides two deployment options depending on your needs:
 
 ### 🚀 Quick Start (Recommended)
 
-**Use our pre-built image** - Perfect for most users who want Drupal running quickly without customization.
+**Use our pre-built image** - Perfect for most users who want Drupal CMS running quickly without customization.
 
 1. **Import Template**: In [Quant Dashboard](https://dashboard.quantcdn.io), create a new application and import this `docker-compose.yml` directly
-2. **Image Source**: The **"Public Registry"** image (`ghcr.io/quantcdn-templates/app-drupal:latest`) will automatically be provided and used by default
-3. **Deploy**: Save the application - your Drupal site will be live in minutes!
+2. **Image Source**: The **"Public Registry"** image (`ghcr.io/quantcdn-templates/app-drupal-cms:latest`) will automatically be provided and used by default
+3. **Deploy**: Save the application - your Drupal CMS site will be live in minutes!
 
 **What you get:**
-- ✅ Latest Drupal version
+- ✅ Latest Drupal CMS version
 - ✅ Automatic updates via our maintained image
 - ✅ Zero configuration required
 - ✅ Production-ready setup
@@ -45,7 +45,7 @@ This template provides two deployment options depending on your needs:
 Add these secrets to your GitHub repository settings:
 - `QUANT_API_KEY` - Your Quant Cloud API key
 - `QUANT_ORGANIZATION` - Your organization slug (e.g., "my-company")  
-- `QUANT_APPLICATION` - Your application name (e.g., "my-drupal-site")
+- `QUANT_APPLICATION` - Your application name (e.g., "my-drupal-cms-site")
 
 #### Step 3: Remove Public Registry CI
 Since you'll be using your own registry, delete the public build file:
@@ -87,7 +87,7 @@ For both deployment options, you can develop locally using either Docker Compose
    ```bash
    docker-compose up -d
    ```
-4. **Install Drupal**: Visit http://localhost and follow the installation wizard
+4. **Install Drupal CMS**: Visit http://localhost and follow the installation wizard
 5. **Access your site** at http://localhost
 
 ### Option 2: DDEV (Recommended for Developers)
@@ -222,7 +222,7 @@ docker-compose exec drupal vendor/bin/phpcbf --standard=./phpcs.xml
 
 3. **Module Installation Issues**
    - Run `composer install` in the `src` directory
-   - Clear Drupal cache: `drush cr`
+   - Clear Drupal CMS cache: `drush cr`
    - Check for PHP memory limits
 
 ### Logs
@@ -240,8 +240,8 @@ docker-compose exec drupal bash
 ## File Structure
 
 ```
-app-drupal/
-├── Dockerfile                           # Drupal image with PHP extensions
+app-drupal-cms/
+├── Dockerfile                           # Drupal CMS image with PHP extensions
 ├── docker-compose.yml                   # Production/base service definition
 ├── docker-compose.override.yml.example  # Local development overrides template
 ├── .github/
@@ -249,10 +249,10 @@ app-drupal/
 │       ├── build-deploy.yaml            # Quant Cloud ECR deployment
 │       ├── ci.yml                       # GitHub Container Registry (public)
 │       └── test.yaml                    # Code standards testing
-├── src/                                 # Drupal codebase
+├── src/                                 # Drupal CMS codebase
 │   ├── composer.json                    # PHP dependencies
-│   ├── settings.php                     # Drupal configuration
-│   ├── services.yml                     # Drupal services
+│   ├── settings.php                     # Drupal CMS configuration
+│   ├── services.yml                     # Drupal CMS services
 │   └── web/                             # Web root (auto-generated)
 ├── quant/
 │   └── meta.json                        # Template metadata
@@ -275,6 +275,6 @@ This template is released under the MIT License. See LICENSE file for details.
 ## Support
 
 For issues and questions:
-- GitHub Issues: [Create an issue](https://github.com/quantcdn-templates/app-drupal/issues)
+- GitHub Issues: [Create an issue](https://github.com/quantcdn-templates/app-drupal-cms/issues)
 - Documentation: [Quant Cloud Documentation](https://docs.quantcdn.io/)
 - Community: [Quant Discord](https://discord.gg/quant)

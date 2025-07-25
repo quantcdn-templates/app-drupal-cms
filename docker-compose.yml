@@ -1,6 +1,6 @@
 services:
   drupal:
-    image: ghcr.io/quantcdn-templates/app-drupal:latest
+    image: ghcr.io/quantcdn-templates/app-drupal-cms:latest
     build: .
     ports:
       - "80:80"
