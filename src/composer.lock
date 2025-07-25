@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0cfc98d51967012b2afb8e9940ade01b",
+    "content-hash": "9515f19159cdbd7285a38d5103f6a980",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2688,16 +2688,16 @@
         },
         {
             "name": "drupal/drupal_cms_anti_spam",
-            "version": "1.2.0",
+            "version": "1.2.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal_cms_anti_spam.git",
-                "reference": "5b2a2d077c0a9dcd1d4fb8163312a19247153ba8"
+                "reference": "a670d248eda345896515d585b26c9f8ef6ebc19a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_anti_spam/repository/archive.zip?sha=5b2a2d077c0a9dcd1d4fb8163312a19247153ba8",
-                "reference": "5b2a2d077c0a9dcd1d4fb8163312a19247153ba8",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_anti_spam/repository/archive.zip?sha=a670d248eda345896515d585b26c9f8ef6ebc19a",
+                "reference": "a670d248eda345896515d585b26c9f8ef6ebc19a",
                 "shasum": ""
             },
             "require": {
@@ -2714,9 +2714,9 @@
             ],
             "description": "Sets up anti-spam and anti-abuse functionality.",
             "support": {
-                "source": "https://git.drupalcode.org/project/drupal_cms_anti_spam/-/tree/1.2.0"
+                "source": "https://git.drupalcode.org/project/drupal_cms_anti_spam/-/tree/1.2.3"
             },
-            "time": "2025-06-20T09:51:47+00:00"
+            "time": "2025-07-09T13:09:00+00:00"
         },
         {
             "name": "drupal/drupal_cms_authentication",
@@ -15130,12 +15130,12 @@
         "cweagans/composer-patches": 10,
         "drupal/core-composer-scaffold": 20,
         "drupal/default_content": 15,
-        "drupal/recipe_installer_kit": 15,
-        "drupal/quantcdn": 5
+        "drupal/quantcdn": 5,
+        "drupal/recipe_installer_kit": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "platform": {},
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }
