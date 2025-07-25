@@ -38,7 +38,7 @@
         "drupal/metatag": "^2.1",
         "drupal/recipe_installer_kit": "^1-alpha3@alpha",
         "drupal/token": "^1",
-        "drupal/webform": "6.3.0-beta2",
+        "drupal/webform": "6.3.0-beta3",
         "drupal/core-project-message": "^11",
         "drupal/devel": "^5.3",
         "drupal/quantcdn": "^2.0@RC",
