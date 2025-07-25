@@ -1,0 +1,26 @@
+services:
+  drupal:
+    image: ghcr.io/quantcdn-templates/app-drupal:latest
+    build: .
+    ports:
+      - "80:80"
+    volumes:
+      - ./src/web/sites/default/files:/opt/drupal/web/sites/default/files
+    # Database environment variables will be provided by Quant Cloud
+    # For local development, use docker-compose.override.yml
+
+  mysql:
+    image: mysql:8.0
+    volumes:
+      - mysql_data:/var/lib/mysql
+    labels:
+      quant.type: none  # Don't deploy to Quant Cloud
+    # Database configuration in docker-compose.override.yml
+
+  redis:
+    image: redis:alpine
+    labels:
+      quant.type: none  # Don't deploy to Quant Cloud
+
+volumes:
+  mysql_data:
