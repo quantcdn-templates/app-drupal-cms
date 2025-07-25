@@ -85,7 +85,7 @@ For both deployment options, you can develop locally using either Docker Compose
    ```
 3. **Start services**:
    ```bash
-   docker-compose up -d
+   docker compose up -d
    ```
 4. **Install Drupal CMS**: Visit http://localhost and follow the installation wizard
 5. **Access your site** at http://localhost
@@ -151,11 +151,11 @@ This template includes Drush (Drupal Console) pre-installed and configured.
 
 ### Local Development
 ```bash
-docker-compose exec drupal drush status
-docker-compose exec drupal drush cr  # Clear cache
-docker-compose exec drupal drush updb  # Update database
-docker-compose exec drupal drush cex  # Export configuration
-docker-compose exec drupal drush cim  # Import configuration
+docker compose exec drupal drush status
+docker compose exec drupal drush cr  # Clear cache
+docker compose exec drupal drush updb  # Update database
+docker compose exec drupal drush cex  # Export configuration
+docker compose exec drupal drush cim  # Import configuration
 ```
 
 ### Quant Cloud (via SSH/exec)
@@ -174,12 +174,12 @@ Run PHP CodeSniffer to check code standards:
 
 ### Local Development
 ```bash
-docker-compose exec drupal vendor/bin/phpcs --standard=./phpcs.xml
+docker compose exec drupal vendor/bin/phpcs --standard=./phpcs.xml
 ```
 
 ### Fix coding standards automatically
 ```bash  
-docker-compose exec drupal vendor/bin/phpcbf --standard=./phpcs.xml
+docker compose exec drupal vendor/bin/phpcbf --standard=./phpcs.xml
 ```
 
 ## Development Workflow
@@ -193,12 +193,12 @@ docker-compose exec drupal vendor/bin/phpcbf --standard=./phpcs.xml
 
 2. **Enable the module**:
    ```bash
-   docker-compose exec drupal drush pm:enable module_name
+   docker compose exec drupal drush pm:enable module_name
    ```
 
 3. **Export configuration**:
    ```bash
-   docker-compose exec drupal drush cex
+   docker compose exec drupal drush cex
    ```
 
 ### Managing Configuration
@@ -229,12 +229,12 @@ docker-compose exec drupal vendor/bin/phpcbf --standard=./phpcs.xml
 
 View container logs:
 ```bash
-docker-compose logs -f drupal
+docker compose logs -f drupal
 ```
 
 ### Accessing the Container
 ```bash
-docker-compose exec drupal bash
+docker compose exec drupal bash
 ```
 
 ## File Structure
