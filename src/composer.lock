@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0cfc98d51967012b2afb8e9940ade01b",
+    "content-hash": "9515f19159cdbd7285a38d5103f6a980",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -2791,16 +2791,16 @@
         },
         {
             "name": "drupal/drupal_cms_image",
-            "version": "1.2.0",
+            "version": "1.2.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal_cms_image.git",
-                "reference": "9d69da4cea84ff44d85df508a4664320bc68f5aa"
+                "reference": "78a6a2248093fab652f78b790eb1f7873cfdf3df"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_image/repository/archive.zip?sha=9d69da4cea84ff44d85df508a4664320bc68f5aa",
-                "reference": "9d69da4cea84ff44d85df508a4664320bc68f5aa",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_image/repository/archive.zip?sha=78a6a2248093fab652f78b790eb1f7873cfdf3df",
+                "reference": "78a6a2248093fab652f78b790eb1f7873cfdf3df",
                 "shasum": ""
             },
             "require": {
@@ -2815,9 +2815,9 @@
             ],
             "description": "Sets up base image configuration including responsive image styles, view modes, focal point-based cropping and SVG images.",
             "support": {
-                "source": "https://git.drupalcode.org/project/drupal_cms_image/-/tree/1.2.0"
+                "source": "https://git.drupalcode.org/project/drupal_cms_image/-/tree/1.2.3"
             },
-            "time": "2025-06-20T09:51:47+00:00"
+            "time": "2025-07-09T13:09:00+00:00"
         },
         {
             "name": "drupal/drupal_cms_page",
@@ -2850,16 +2850,16 @@
         },
         {
             "name": "drupal/drupal_cms_privacy_basic",
-            "version": "1.2.0",
+            "version": "1.2.3",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal_cms_privacy_basic.git",
-                "reference": "67ba3d586188f4a52bb9c496d114fb0418846e25"
+                "reference": "0fd31d5515a681dbac620f292c5e6180ab68781f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_privacy_basic/repository/archive.zip?sha=67ba3d586188f4a52bb9c496d114fb0418846e25",
-                "reference": "67ba3d586188f4a52bb9c496d114fb0418846e25",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_privacy_basic/repository/archive.zip?sha=0fd31d5515a681dbac620f292c5e6180ab68781f",
+                "reference": "0fd31d5515a681dbac620f292c5e6180ab68781f",
                 "shasum": ""
             },
             "require": {
@@ -2877,23 +2877,23 @@
             ],
             "description": "Adds basic privacy features such as consent management and remote content blocking.",
             "support": {
-                "source": "https://git.drupalcode.org/project/drupal_cms_privacy_basic/-/tree/1.2.0"
+                "source": "https://git.drupalcode.org/project/drupal_cms_privacy_basic/-/tree/1.2.3"
             },
-            "time": "2025-06-20T09:51:47+00:00"
+            "time": "2025-07-09T13:09:00+00:00"
         },
         {
             "name": "drupal/eca",
-            "version": "2.1.10",
+            "version": "2.1.11",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/eca.git",
-                "reference": "2.1.10"
+                "reference": "2.1.11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/eca-2.1.10.zip",
-                "reference": "2.1.10",
-                "shasum": "eaae440d51c17178340cebc21af62f5792b7026b"
+                "url": "https://ftp.drupal.org/files/projects/eca-2.1.11.zip",
+                "reference": "2.1.11",
+                "shasum": "851b00d8f2b2d9702c6aec8e4af44366e74ad592"
             },
             "require": {
                 "dragonmantank/cron-expression": "^3.1",
@@ -2904,19 +2904,21 @@
                 "php": ">=8.1"
             },
             "require-dev": {
+                "drupal/ai": "^1.2",
+                "drupal/ai_agents": "^1.2",
                 "drupal/eca_ui": "*",
                 "drupal/entity_reference_revisions": "^1.12",
                 "drupal/inline_entity_form": "^3.0",
                 "drupal/paragraphs": "^1.18",
                 "drupal/project_browser": "^2.0",
                 "drupal/token": "^1.15",
-                "drupal/webform": "dev-3465838-drupal-11-compatibility"
+                "drupal/webform": "^6.3"
             },
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "2.1.10",
-                    "datestamp": "1751524996",
+                    "version": "2.1.11",
+                    "datestamp": "1753534704",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2950,7 +2952,7 @@
         },
         {
             "name": "drupal/eca_modeller_bpmn",
-            "version": "2.1.10",
+            "version": "2.1.11",
             "require": {
                 "drupal/core": "^10.3 || ^11",
                 "drupal/eca": "^2",
@@ -2959,8 +2961,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "2.1.10",
-                    "datestamp": "1751524996",
+                    "version": "2.1.11",
+                    "datestamp": "1753534704",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -2993,7 +2995,7 @@
         },
         {
             "name": "drupal/eca_ui",
-            "version": "2.1.10",
+            "version": "2.1.11",
             "require": {
                 "drupal/core": "^10.3 || ^11",
                 "drupal/eca": "*"
@@ -3001,8 +3003,8 @@
             "type": "metapackage",
             "extra": {
                 "drupal": {
-                    "version": "2.1.10",
-                    "datestamp": "1751524996",
+                    "version": "2.1.11",
+                    "datestamp": "1753534704",
                     "security-coverage": {
                         "status": "covered",
                         "message": "Covered by Drupal's security advisory policy"
@@ -15130,12 +15132,12 @@
         "cweagans/composer-patches": 10,
         "drupal/core-composer-scaffold": 20,
         "drupal/default_content": 15,
-        "drupal/recipe_installer_kit": 15,
-        "drupal/quantcdn": 5
+        "drupal/quantcdn": 5,
+        "drupal/recipe_installer_kit": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "platform": {},
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }
