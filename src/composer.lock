@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "0cfc98d51967012b2afb8e9940ade01b",
+    "content-hash": "9a3cb0de2925ae5c42a562638b56a711",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -3035,17 +3035,17 @@
         },
         {
             "name": "drupal/experience_builder",
-            "version": "0.7.0-alpha1",
+            "version": "0.7.3-alpha1",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/experience_builder.git",
-                "reference": "0.7.0-alpha1"
+                "reference": "0.7.3-alpha1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://ftp.drupal.org/files/projects/experience_builder-0.7.0-alpha1.zip",
-                "reference": "0.7.0-alpha1",
-                "shasum": "f667df5fb87aca30c72dd67829a4e7c089a3301e"
+                "url": "https://ftp.drupal.org/files/projects/experience_builder-0.7.3-alpha1.zip",
+                "reference": "0.7.3-alpha1",
+                "shasum": "41141110ba9a55e9ed9c9d55ceb4873bad903f85"
             },
             "require": {
                 "drupal/core": "^11.2",
@@ -3066,8 +3066,8 @@
             "type": "drupal-module",
             "extra": {
                 "drupal": {
-                    "version": "0.7.0-alpha1",
-                    "datestamp": "1752882279",
+                    "version": "0.7.3-alpha1",
+                    "datestamp": "1753882081",
                     "security-coverage": {
                         "status": "not-covered",
                         "message": "Project has not opted into security advisory coverage!"
@@ -15130,12 +15130,12 @@
         "cweagans/composer-patches": 10,
         "drupal/core-composer-scaffold": 20,
         "drupal/default_content": 15,
-        "drupal/recipe_installer_kit": 15,
-        "drupal/quantcdn": 5
+        "drupal/quantcdn": 5,
+        "drupal/recipe_installer_kit": 15
     },
     "prefer-stable": true,
     "prefer-lowest": false,
-    "platform": [],
-    "platform-dev": [],
-    "plugin-api-version": "2.3.0"
+    "platform": {},
+    "platform-dev": {},
+    "plugin-api-version": "2.6.0"
 }
