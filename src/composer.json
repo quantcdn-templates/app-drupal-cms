@@ -1,70 +1,67 @@
 {
-    "name": "quant/drupal-cms",
-    "description": "Drupal CMS project for QuantCDN",
+    "name": "drupal/cms",
+    "version": "1.2.3",
+    "description": "Drupal CMS template for QuantCDN. Drupal CMS is a ready-to-use platform built on Drupal core, offering smart defaults to get started quickly and enterprise-grade tools for marketers, designers, and content creators.",
     "type": "project",
     "license": "GPL-2.0-or-later",
     "homepage": "https://www.drupal.org/project/cms",
     "support": {
-        "docs": "https://www.drupal.org/docs/user_guide/en/index.html",
-        "chat": "https://www.drupal.org/node/314178"
+        "docs": "https://drupal.org/docs/drupal-cms",
+        "chat": "https://drupal.org/node/314178"
     },
-    "repositories": [
-        {
+    "repositories": {
+        "drupal": {
             "type": "composer",
             "url": "https://packages.drupal.org/8"
-        },
-        {
-            "type": "vcs",
-            "url": "https://github.com/phenaproxima/xb-demo/"
         }
-    ],
+    },
     "require": {
         "composer/installers": "^2.3",
-        "cweagans/composer-patches": "^2@beta",
-        "drupal/bpmn_io": "^2.0.6",
-        "drupal/core": "11.2.0",
-        "drupal/core-composer-scaffold": "11.x-dev@dev",
-        "drupal/core-recommended": "11.2.0",
-        "drupal/dashboard": "^2",
-        "drupal/default_content": "^2-alpha@alpha",
-        "drupal/demo_design_system": "1.0.6",
-        "drupal/drupal_cms_admin_ui": "^1.1",
-        "drupal/drupal_cms_anti_spam": "^1.1",
-        "drupal/drupal_cms_authentication": "^1.1",
-        "drupal/drupal_cms_page": "^1.1",
-        "drupal/drupal_cms_privacy_basic": "^1.1",
-        "drupal/eca": "^2.1.3",
-        "drupal/experience_builder": "0.7.0-alpha1",
-        "drupal/metatag": "^2.1",
-        "drupal/recipe_installer_kit": "^1-alpha3@alpha",
-        "drupal/token": "^1",
-        "drupal/webform": "6.3.0-beta2",
-        "drupal/core-project-message": "^11",
+        "drupal/core": "@rc",
+        "drupal/core-composer-scaffold": "^11.2",
+        "drupal/core-project-message": "^11.2",
+        "drupal/core-recipe-unpack": "^11.2",
+        "drupal/core-recommended": "^11.2",
+        "drupal/drupal_cms_accessibility_tools": "^1.2",
+        "drupal/drupal_cms_ai": "^1.2",
+        "drupal/drupal_cms_analytics": "^1.2",
+        "drupal/drupal_cms_blog": "^1.2",
+        "drupal/drupal_cms_case_study": "^1.2",
+        "drupal/drupal_cms_events": "^1.2",
+        "drupal/drupal_cms_forms": "^1.2",
+        "drupal/drupal_cms_news": "^1.2",
+        "drupal/drupal_cms_page": "^1.2",
+        "drupal/drupal_cms_person": "^1.2",
+        "drupal/drupal_cms_project": "^1.2",
+        "drupal/drupal_cms_seo_tools": "^1.2",
+        "drupal/drupal_cms_starter": "^1.2",
+        "drupal/project_browser": "@beta",
+        "drupal/recipe_installer_kit": "^1-alpha6@alpha",
+        "drupal/webform": "@beta",
         "drupal/devel": "^5.3",
         "drupal/quantcdn": "^2.0@RC",
         "drupal/redis": "^1.9",
-        "drush/drush": "^13.5"
+        "cweagans/composer-patches": "^2@beta"
+    },
+    "require-dev": {
+        "drupal/core-dev": "^11",
+        "drush/drush": "^13.6.1"
     },
     "conflict": {
         "drupal/drupal": "*"
     },
-    "scripts": {
-        "post-install-cmd": [
-            "@php -r \"copy('settings.php', 'web/sites/default/settings.php');\"",
-            "@php -r \"copy('services.yml', 'web/sites/default/services.yml');\"",
-            "@php -r \"copy('redis-unavailable.services.yml', 'web/sites/default/redis-unavailable.services.yml');\""
-        ]
-    },
-    "minimum-stability": "dev",
+    "minimum-stability": "stable",
     "prefer-stable": true,
     "config": {
         "allow-plugins": {
             "composer/installers": true,
-            "cweagans/composer-patches": true,
-            "dealerdirect/phpcodesniffer-composer-installer": true,
             "drupal/core-composer-scaffold": true,
             "drupal/core-project-message": true,
+            "drupal/core-recipe-unpack": true,
             "php-http/discovery": true,
+            "drupal/core-vendor-hardening": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
             "phpstan/extension-installer": true,
             "tbachert/spi": true
         },
@@ -78,74 +75,29 @@
             }
         },
         "installer-paths": {
-            "web/core": [
-                "type:drupal-core"
-            ],
-            "web/libraries/{$name}": [
-                "type:drupal-library"
-            ],
-            "web/modules/contrib/{$name}": [
-                "type:drupal-module"
-            ],
-            "web/profiles/contrib/{$name}": [
-                "type:drupal-profile"
-            ],
-            "web/themes/contrib/{$name}": [
-                "type:drupal-theme"
-            ],
-            "drush/Commands/contrib/{$name}": [
-                "type:drupal-drush"
-            ],
-            "web/modules/custom/{$name}": [
-                "type:drupal-custom-module"
-            ],
-            "web/profiles/custom/{$name}": [
-                "type:drupal-custom-profile"
-            ],
-            "web/themes/custom/{$name}": [
-                "type:drupal-custom-theme"
-            ],
-            "recipes/{$name}": [
-              "type:drupal-recipe"
-            ]
-        },
-        "extra": {
-            "patches": {
-                "drupal/gin": {
-                    "#3497793: Dialog styles are not loading correctly in Experience Builder": "https://www.drupal.org/files/issues/2025-07-08/3497793-2025-07-08-gin-dialog.patch"
-                },
-                "drupal/experience_builder": {
-                    "#3531991: Experience builder has limited built-in metatag features, disable advanced form fields there as initial stop-gap": "https://www.drupal.org/files/issues/2025-07-09/1214.diff.txt"
-                },
-                "drupal/webform": {
-                    "#3526637: Make webform blocks fully validatable and thus show as as dynamic component in Experience Builder": "https://www.drupal.org/files/issues/2025-07-11/webform-block-schema.patch",
-                    "#3526637: Make webform autocomplete a select list because autocomplate does not work with XB yet": "https://www.drupal.org/files/issues/2025-07-21/webform-block-select-only-for-xb-demo-3.patch"
-                }
-            }
+            "web/core": ["type:drupal-core"],
+            "web/libraries/{$name}": ["type:drupal-library"],
+            "web/modules/contrib/{$name}": ["type:drupal-module"],
+            "web/profiles/contrib/{$name}": ["type:drupal-profile"],
+            "web/themes/contrib/{$name}": ["type:drupal-theme"],
+            "./drush/Commands/contrib/{$name}": ["type:drupal-drush"],
+            "web/modules/custom/{$name}": ["type:drupal-custom-module"],
+            "web/profiles/custom/{$name}": ["type:drupal-custom-profile"],
+            "./recipes/{$name}": ["type:drupal-recipe"],
+            "web/themes/custom/{$name}": ["type:drupal-custom-theme"]
         },
         "drupal-core-project-message": {
-            "include-keys": [
-                "homepage",
-                "support"
-            ],
+            "include-keys": ["homepage", "support"],
             "post-create-project-cmd-message": [
-                "<bg=blue;fg=white>                                                         </>",
-                "<bg=blue;fg=white>  Congratulations, you’ve installed the Drupal codebase  </>",
-                "<bg=blue;fg=white>  from the drupal/recommended-project template!          </>",
-                "<bg=blue;fg=white>                                                         </>",
+                "<bg=blue;fg=white>                                                   </>",
+                "<bg=blue;fg=white>  Congratulations, you’ve installed Drupal CMS!    </>",
+                "<bg=blue;fg=white>                                                   </>",
                 "",
                 "<bg=yellow;fg=black>Next steps</>:",
-                "  * Install the site: https://www.drupal.org/docs/installing-drupal",
                 "  * Read the user guide: https://www.drupal.org/docs/user_guide/en/index.html",
-                "  * Get support: https://www.drupal.org/support",
-                "  * Get involved with the Drupal community:",
-                "      https://www.drupal.org/getting-involved",
-                "  * Remove the plugin that prints this message:",
-                "      composer remove drupal/core-project-message"
+                "  * Get support: https://drupal.org/support",
+                "  * Get involved with the Drupal community: https://drupal.org/getting-involved"
             ]
         }
-    },
-    "require-dev": {
-        "drupal/core-dev": "^11"
     }
 }
