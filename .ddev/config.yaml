@@ -1,4 +1,4 @@
-name: DrupalPod
+name: quant-drupal-cms
 type: drupal11
 docroot: src/web
 php_version: "8.3"
