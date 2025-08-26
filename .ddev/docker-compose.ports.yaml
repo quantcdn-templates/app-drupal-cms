@@ -3,5 +3,5 @@ services:
   web:
     # ports are a list of exposed *container* ports
     ports:
-      - 3000:3000
-      - 5000:5000
+      - 0:3000 # 3000 mapped to random free port to avoid local collisions
+      - 0:5000 # 5000 mapped to random free port to avoid local collisions
