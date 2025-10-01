@@ -15,5 +15,5 @@ drush status
 ## Configuration import example.
 #drush cim -y
 
-## Warm Drupal CMS caches.
+## Warm Drupal caches.
 curl -X GET -I http://localhost
