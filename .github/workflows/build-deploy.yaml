@@ -62,6 +62,12 @@ jobs:
         run: |
           echo "stripped_endpoint=$(echo '${{ steps.ecr-login.outputs.endpoint }}' | sed -E 's|^https?://||')" >> $GITHUB_OUTPUT
 
+      - name: Extract metadata (labels)
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ steps.ecr-endpoint-stripped.outputs.stripped_endpoint }}/${{ secrets.QUANT_ORGANIZATION }}/${{ secrets.QUANT_APPLICATION }}
+
       - name: Build and push Drupal CMS image
         uses: docker/build-push-action@v5
         with:
@@ -75,6 +81,7 @@ jobs:
             type=registry,ref=ghcr.io/quantcdn-templates/app-drupal-cms:cache
           cache-to: |
             type=gha,mode=max
+          labels: ${{ steps.meta.outputs.labels }}
 
       - name: Redeploy environment
         uses: quantcdn/quant-cloud-environment-state-action@v1
