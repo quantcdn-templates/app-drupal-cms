@@ -3,9 +3,11 @@ services:
     image: ghcr.io/quantcdn-templates/app-drupal-cms:latest
     build: .
     ports:
-      - "80:80"
+      - "8084:80"
     volumes:
-      - ./src/web/sites/default/files:/opt/drupal/web/sites/default/files
+      # Entire Drupal CMS codebase is persistent to support UI-based updates,
+      # Project Browser, Automatic Updates, and Recipes
+      - drupal_cms:/opt/drupal
     # Database environment variables will be provided by Quant Cloud
     # For local development, use docker-compose.override.yml
 
@@ -23,4 +25,7 @@ services:
       quant.type: none  # Don't deploy to Quant Cloud
 
 volumes:
+  drupal_cms:
+    labels:
+      quant.volume.type: efs  # Use EFS for shared persistent storage in Quant Cloud
   mysql_data:

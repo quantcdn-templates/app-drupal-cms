@@ -1,280 +1,120 @@
 # Drupal CMS Template for Quant Cloud
 
-A production-ready Drupal CMS template designed for deployment on Quant Cloud. This template uses a standard Drupal CMS installation with intelligent environment variable mapping to support Quant Cloud's database configuration.
+This template provides a ready-to-deploy [Drupal CMS](https://www.acquia.com/blog/drupal-cms) (formerly Starshot) installation optimized for Quant Cloud.
 
-## Features
+## What is Drupal CMS?
 
-- **Drupal CMS Latest**: Based on PHP 8.3 with all required extensions
-- **Composer Managed**: Modern Drupal development with dependency management
-- **Quant Cloud Integration**: Maps Quant Cloud's `DB_*` variables to Drupal standards
-- **Production Ready**: Includes proper configuration, security settings, and performance optimizations
-- **Drush Included**: Drupal CLI tool pre-installed and configured
-- **Code Standards**: PHP CodeSniffer with Drupal coding standards included
-- **CI/CD Integration**: GitHub Actions workflow for automated building and deployment
-- **Multi-Registry Support**: Pushes to both GitHub Container Registry and Quant Cloud Registry
-- **Database Ready**: Works with Quant Cloud's managed database service
+Drupal CMS is the next generation of Drupal, designed for **UI-managed workflows**. Key features include:
 
-## Deployment to Quant Cloud
+- **Project Browser** - Install modules and themes directly from the admin UI
+- **Automatic Updates** - Keep core, modules, and themes updated automatically
+- **Recipes** - Apply pre-packaged configurations for common use cases
+- **AI Features** - AI-powered site building, content suggestions, and more
+- **Modern Admin UI** - Clean, intuitive interface with drag-and-drop dashboards
 
-This template provides two deployment options depending on your needs:
+## Architecture: Mutable Codebase
 
-### 🚀 Quick Start (Recommended)
+Unlike traditional Drupal deployments with immutable containers, **Drupal CMS requires a mutable filesystem** to support its UI-managed features.
 
-**Use our pre-built image** - Perfect for most users who want Drupal CMS running quickly without customization.
+### How It Works
 
-1. **Import Template**: In [Quant Dashboard](https://dashboard.quantcdn.io), create a new application and import this `docker-compose.yml` directly
-2. **Image Source**: The **"Public Registry"** image (`ghcr.io/quantcdn-templates/app-drupal-cms:latest`) will automatically be provided and used by default
-3. **Deploy**: Save the application - your Drupal CMS site will be live in minutes!
+1. **Container Image** - Contains Drupal CMS source at `/usr/src/drupal-cms/`
+2. **Persistent Volume** - EFS volume mounted at `/opt/drupal/`
+3. **First Boot** - Entrypoint script copies source files to volume if empty
+4. **Subsequent Boots** - Uses existing files from persistent volume
+5. **UI Updates** - Module installs, updates, and Recipe applications persist to EFS
 
-**What you get:**
-- ✅ Latest Drupal CMS version
-- ✅ Automatic updates via our maintained image
-- ✅ Zero configuration required
-- ✅ Production-ready setup
-- ✅ Works with Quant Cloud's managed database
-
-### ⚙️ Advanced (Custom Build)
-
-**Fork and customize** - For users who need custom modules, themes, or configuration.
-
-#### Step 1: Get the Template
-- Click **"Use this template"** on GitHub, or fork this repository
-- Clone your new repository locally
-
-#### Step 2: Setup CI/CD Pipeline  
-Add these secrets to your GitHub repository settings:
-- `QUANT_API_KEY` - Your Quant Cloud API key
-- `QUANT_ORGANIZATION` - Your organization slug (e.g., "my-company")  
-- `QUANT_APPLICATION` - Your application name (e.g., "my-drupal-cms-site")
-
-#### Step 3: Remove Public Registry CI
-Since you'll be using your own registry, delete the public build file:
-```bash
-rm .github/workflows/ci.yml
-```
-
-#### Step 4: Create Application
-1. In Quant Cloud, create a new application 
-2. Import your `docker-compose.yml`
-3. Select **"Internal Registry"** when prompted
-4. This will use your custom built image from the Quant Cloud private registry
-
-#### Step 5: Deploy
-- Push to `master`/`main` branch → Production deployment
-- Push to `develop` branch → Staging deployment  
-- Create tags → Tagged releases
-
-**What you get:**
-- ✅ Full customization control
-- ✅ Your own Docker registry
-- ✅ Automated builds on git push
-- ✅ Staging and production environments
-- ✅ Version tagging support
-
----
+This pattern is similar to the WordPress approach, allowing the application to manage itself while maintaining container-based deployment.
 
 ## Local Development
 
-For both deployment options, you can develop locally using either Docker Compose or DDEV:
+```bash
+# Copy override file (required for local development)
+cp docker-compose.override.yml.example docker-compose.override.yml
+# Note: This enables testing of entrypoint scripts that normally run via Quant Cloud's platform wrapper
 
-### Option 1: Docker Compose
-1. **Clone** your repo (or this template)
-2. **Copy overrides**:
-   ```bash
-   cp docker-compose.override.yml.example docker-compose.override.yml
-   ```
-3. **Start services**:
-   ```bash
-   docker compose up -d
-   ```
-4. **Install Drupal CMS**: Visit http://localhost and follow the installation wizard
-5. **Access your site** at http://localhost
+# Start services
+docker-compose up -d
 
-### Option 2: DDEV (Recommended for Developers)
-1. **Install DDEV**: https://ddev.readthedocs.io/en/stable/users/install/
-2. **Install dependencies**:
-   ```bash
-   ddev composer install
-   ```
-3. **Check status**:
-   ```bash
-   ddev status
-   ```
-4. **Access your site** at the provided DDEV URL and go through the installer
+# Access site
+open http://localhost
 
-DDEV provides additional developer tools like Xdebug, Drush integration, Redis caching, and matches production configuration exactly. See `.ddev/README.md` for details.
+# View logs
+docker-compose logs -f drupal
 
-**Local vs Quant Cloud:**
+# Access Drush
+docker-compose exec drupal drush status
 
-| Feature | Local Development | Quant Cloud |
-|---------|------------------|-------------|
-| **Database** | MySQL container | Managed RDS |
-| **Environment** | `docker-compose.override.yml` | Platform variables |
-| **Storage** | Local volumes | EFS persistent storage |
-| **Scaling** | Single container | Auto-scaling |
-| **Debug** | Available via settings | Production optimized |
-| **Redis Cache** | Optional (via override) | Optional (via env vars) |
-| **Access** | localhost | Custom domains + CDN |
+# Shell access
+docker-compose exec drupal bash
+```
 
-## Environment Variables
+## Deployment to Quant Cloud
 
-### Database Configuration (Automatic)
-These are automatically provided by Quant Cloud:
-- `DB_HOST` - Database host
-- `DB_DATABASE` - Database name  
+The template is pre-configured for Quant Cloud:
+
+- ✅ ARM64-optimized builds
+- ✅ EFS-backed persistent volume for `/opt/drupal/`
+- ✅ Environment-specific builds (dev vs production)
+- ✅ Automatic redeployment on git push
+- ✅ Database syncing between environments
+
+## Configuration
+
+### Environment Variables
+
+Standard Drupal database variables are automatically provided by Quant Cloud:
+
+- `DB_HOST` - Database hostname
+- `DB_DATABASE` - Database name
 - `DB_USERNAME` - Database username
 - `DB_PASSWORD` - Database password
+- `DB_PORT` - Database port (default: 3306)
 
-### Optional Drupal Configuration
-- `DB_PREFIX` - Table prefix (default: none)
-- `DRUPAL_DEBUG` - Enable debug mode (default: `false`)
-- `REDIS_ENABLED` - Enable Redis caching (set to `"true"` to enable)
-- `REDIS_HOST` - Redis server host (default: `redis`)
+### Custom Entrypoints
 
-The template automatically falls back to legacy `MARIADB_*` variables for backward compatibility.
+Add custom initialization scripts to `.docker/quant/entrypoints/` - they run on container startup.
 
-### Redis Caching (Optional)
+### PHP Configuration
 
-Redis can significantly improve Drupal's performance by providing fast caching. Redis is **optional** and disabled by default.
+Customize PHP settings in `.docker/quant/php.ini.d/` - see README.md in that directory.
 
-**To enable Redis:**
+## Important Notes
 
-1. **Local Development**: Uncomment the Redis section in `docker-compose.override.yml`
-2. **Production**: Set `REDIS_ENABLED=true` in your Quant Cloud environment variables
-3. **Install Redis module**: `composer require drupal/redis` and enable it
+### Persistent Volume Required
 
-If Redis is not available or fails to connect, Drupal automatically falls back to database caching.
+The entire `/opt/drupal/` directory must be persistent (EFS in Quant Cloud) to support:
+- UI-based module/theme installation
+- Automatic updates
+- Recipe applications
+- Custom code added through admin UI
 
-## Drush Support
+### Updates Through UI vs CI/CD
 
-This template includes Drush (Drupal Console) pre-installed and configured.
+With Drupal CMS, you can choose:
 
-### Local Development
-```bash
-docker compose exec drupal drush status
-docker compose exec drupal drush cr  # Clear cache
-docker compose exec drupal drush updb  # Update database
-docker compose exec drupal drush cex  # Export configuration
-docker compose exec drupal drush cim  # Import configuration
+1. **UI-Managed** (Default) - Use Project Browser and Automatic Updates
+2. **CI/CD-Managed** - Disable UI updates and manage through git/composer
+
+To disable UI updates, add to `settings.php`:
+```php
+$settings['allow_authorize_operations'] = FALSE;
 ```
 
-### Quant Cloud (via SSH/exec)
-```bash
-drush status
-drush cr
-drush pm:enable module_name
-drush pm:uninstall module_name
-```
+### Container Rebuilds
 
-Drush automatically inherits the environment variables and database configuration, so it works seamlessly with both local and production environments.
+When rebuilding containers:
+- Source files in image at `/usr/src/drupal-cms/` are updated
+- Existing persistent volume at `/opt/drupal/` is preserved
+- To start fresh, delete the EFS volume
 
-## Code Standards
+## Learn More
 
-Run PHP CodeSniffer to check code standards:
-
-### Local Development
-```bash
-docker compose exec drupal vendor/bin/phpcs --standard=./phpcs.xml
-```
-
-### Fix coding standards automatically
-```bash  
-docker compose exec drupal vendor/bin/phpcbf --standard=./phpcs.xml
-```
-
-## Development Workflow
-
-### Adding Custom Modules/Themes
-1. **Add to composer.json** in the `src` folder:
-   ```bash
-   cd src
-   composer require drupal/module_name
-   ```
-
-2. **Enable the module**:
-   ```bash
-   docker compose exec drupal drush pm:enable module_name
-   ```
-
-3. **Export configuration**:
-   ```bash
-   docker compose exec drupal drush cex
-   ```
-
-### Managing Configuration
-- Configuration is stored in `src/config/default`
-- Export: `drush cex`
-- Import: `drush cim`
-- Configurations are automatically imported on deployment
-
-## Troubleshooting
-
-### Common Issues
-
-1. **Database Connection Failed**
-   - Check `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD` values
-   - Verify database service is running (Quant Cloud manages this)
-   - Check network connectivity
-
-2. **Permission Issues**
-   - Ensure `src` folder has proper permissions
-   - Check Docker volume mounts
-
-3. **Module Installation Issues**
-   - Run `composer install` in the `src` directory
-   - Clear Drupal CMS cache: `drush cr`
-   - Check for PHP memory limits
-
-### Logs
-
-View container logs:
-```bash
-docker compose logs -f drupal
-```
-
-### Accessing the Container
-```bash
-docker compose exec drupal bash
-```
-
-## File Structure
-
-```
-app-drupal-cms/
-├── Dockerfile                           # Drupal CMS image with PHP extensions
-├── docker-compose.yml                   # Production/base service definition
-├── docker-compose.override.yml.example  # Local development overrides template
-├── .github/
-│   └── workflows/
-│       ├── build-deploy.yaml            # Quant Cloud ECR deployment
-│       ├── ci.yml                       # GitHub Container Registry (public)
-│       └── test.yaml                    # Code standards testing
-├── src/                                 # Drupal CMS codebase
-│   ├── composer.json                    # PHP dependencies
-│   ├── settings.php                     # Drupal CMS configuration
-│   ├── services.yml                     # Drupal CMS services
-│   └── web/                             # Web root (auto-generated)
-├── quant/
-│   └── meta.json                        # Template metadata
-└── README.md                            # This file
-```
-
-## Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test with both local development and Quant Cloud deployment
-5. Run code standards: `./test-coding-standards.sh`
-6. Submit a pull request
-
-## License
-
-This template is released under the MIT License. See LICENSE file for details.
+- [Drupal CMS Official Site](https://new.drupal.org/drupal-cms)
+- [Drupal CMS Blog Post](https://www.acquia.com/blog/drupal-cms)
+- [Starshot Initiative](https://drupal.org/about/starshot)
+- [Dries' Launch Article](https://dri.es/drupal-cms-1-released)
 
 ## Support
 
-For issues and questions:
-- GitHub Issues: [Create an issue](https://github.com/quantcdn-templates/app-drupal-cms/issues)
-- Documentation: [Quant Cloud Documentation](https://docs.quantcdn.io/)
-- Community: [Quant Discord](https://discord.gg/quant)
+For Quant Cloud support, contact [support@quantcdn.io](mailto:support@quantcdn.io)

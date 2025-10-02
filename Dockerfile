@@ -33,19 +33,32 @@ RUN chmod +x /quant/deployment-scripts/* && \
     usermod -a -G root nobody && \
     usermod -a -G www-data root
 
-# Copy source code (changes frequently - do this last!)
-COPY src/ /opt/drupal/
+# Copy remaining source code (changes frequently - do this last!)
+COPY src/ ./
 
-# Final setup that depends on source code
-RUN set -eux; \
-    chown -R www-data:www-data web/sites web/modules web/themes
+# Copy the BUILT source (including vendor/) to template location for volume initialization
+RUN cp -a /opt/drupal /usr/src/drupal-cms && \
+    chown -R www-data:www-data /usr/src/drupal-cms && \
+    rm -rf /opt/drupal/* && \
+    mkdir -p /opt/drupal
+
+# Create volume mount point for persistent Drupal CMS installation
+# Volume starts empty; entrypoint copies from /usr/src/drupal-cms/ on first boot
+VOLUME /opt/drupal
 
 # Set PATH
 ENV PATH=${PATH}:/opt/drupal/vendor/bin
 
+# Copy custom entrypoint script for local development
+# (Only used when overridden in docker-compose.override.yml)
+COPY .docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint-drupal-cms.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint-drupal-cms.sh
+
 # Expose ports
 EXPOSE 80
 
-# Use standard Apache/PHP entrypoint (entrypoints in /quant-entrypoint.d/ run via Quant platform wrapper)
+# Use standard Apache/PHP entrypoint by default
+# In Quant Cloud, the platform wrapper runs /quant-entrypoint.d/ scripts automatically
+# For local dev, copy docker-compose.override.yml.example to docker-compose.override.yml
 ENTRYPOINT ["docker-php-entrypoint"]
 CMD ["apache2-foreground"]
