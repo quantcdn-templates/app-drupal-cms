@@ -1,5 +1,5 @@
 services:
-  drupal:
+  drupal-cms:
     image: ghcr.io/quantcdn-templates/app-drupal-cms:latest
     build: .
     ports:
