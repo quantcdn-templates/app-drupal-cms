@@ -40,13 +40,13 @@ docker compose up -d
 open http://localhost
 
 # View logs
-docker compose logs -f drupal
+docker compose logs -f drupal-cms
 
 # Access Drush
-docker compose exec drupal drush status
+docker compose exec drupal-cms drush status
 
 # Shell access
-docker compose exec drupal bash
+docker compose exec drupal-cms bash
 ```
 
 ## Deployment to Quant Cloud
