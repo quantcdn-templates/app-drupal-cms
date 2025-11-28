@@ -34,19 +34,19 @@ cp docker-compose.override.yml.example docker-compose.override.yml
 # Note: This enables testing of entrypoint scripts that normally run via Quant Cloud's platform wrapper
 
 # Start services
-docker-compose up -d
+docker compose up -d
 
 # Access site
 open http://localhost
 
 # View logs
-docker-compose logs -f drupal
+docker compose logs -f drupal
 
 # Access Drush
-docker-compose exec drupal drush status
+docker compose exec drupal drush status
 
 # Shell access
-docker-compose exec drupal bash
+docker compose exec drupal bash
 ```
 
 ## Deployment to Quant Cloud
@@ -114,6 +114,19 @@ When rebuilding containers:
 - [Drupal CMS Blog Post](https://www.acquia.com/blog/drupal-cms)
 - [Starshot Initiative](https://drupal.org/about/starshot)
 - [Dries' Launch Article](https://dri.es/drupal-cms-1-released)
+
+## Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test with both local development and Quant Cloud deployment
+5. Check coding standards
+6. Submit a pull request
+
+## License
+
+This template is released under the MIT License. See LICENSE file for details.
 
 ## Support
 
