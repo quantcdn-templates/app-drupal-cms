@@ -1,4 +1,5 @@
 src/vendor/
+src/config/
 src/recipes/
 src/web/core/
 src/web/libraries/
