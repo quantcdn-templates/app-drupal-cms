@@ -10,7 +10,7 @@
 # In production (Quant Cloud), the platform wrapper handles entrypoints automatically.
 
 services:
-  drupal:
+  drupal-cms:
     # Override entrypoint for local dev to run /quant-entrypoint.d/ scripts
     # This copies Drupal CMS source to the persistent volume on first boot
     entrypoint: ["/usr/local/bin/docker-entrypoint-drupal-cms.sh"]
