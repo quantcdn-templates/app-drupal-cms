@@ -16,6 +16,12 @@ services:
     entrypoint: ["/usr/local/bin/docker-entrypoint-drupal-cms.sh"]
     command: ["apache2-foreground"]
     
+    volumes:
+      # Mount entire src directory for local development
+      - ./src:/opt/drupal
+      # Mount dev PHP config to override production settings (zz- prefix ensures it loads last)
+      - ./dev-php.ini:/usr/local/etc/php/conf.d/zz-dev.ini:ro
+    
     # Set environment variables for local development
     environment:
       - QUANT_ENV_TYPE=development
@@ -24,6 +30,7 @@ services:
       - DB_USERNAME=drupal
       - DB_PASSWORD=drupal
       - DB_PORT=3306
+      - DISABLE_DB_TLS=true
       - DRUPAL_HASH_SALT=local-dev-salt-change-in-production
 
   mysql:

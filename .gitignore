@@ -1,1 +1,7 @@
 src/vendor/
+src/recipes/
+src/web/core/
+src/web/libraries/
+src/web/modules/
+src/web/sites/
+src/web/themes/

@@ -29,9 +29,14 @@ This pattern is similar to the WordPress approach, allowing the application to m
 ## Local Development
 
 ```bash
+# Install dependencies
+cd src && composer install && cd ..
+
 # Copy override file (required for local development)
 cp docker-compose.override.yml.example docker-compose.override.yml
-# Note: This enables testing of entrypoint scripts that normally run via Quant Cloud's platform wrapper
+# Note: This enables testing of entrypoint scripts (like 00-copy-drupal-cms.sh) that 
+# normally run via Quant Cloud's platform wrapper. It also mounts your local src/ 
+# directory for live code changes and disables opcache for faster development.
 
 # Start services
 docker compose up -d
@@ -47,7 +52,6 @@ docker compose exec drupal-cms drush status
 
 # Shell access
 docker compose exec drupal-cms bash
-```
 
 ## Deployment to Quant Cloud
 

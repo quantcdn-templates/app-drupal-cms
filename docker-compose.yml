@@ -3,7 +3,7 @@ services:
     image: ghcr.io/quantcdn-templates/app-drupal-cms:latest
     build: .
     ports:
-      - "8084:80"
+     - "80:80"
     volumes:
       # Entire Drupal CMS codebase is persistent to support UI-based updates,
       # Project Browser, Automatic Updates, and Recipes
