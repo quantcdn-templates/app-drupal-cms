@@ -62,12 +62,13 @@
     "config": {
         "allow-plugins": {
             "composer/installers": true,
+            "cweagans/composer-patches": true,
+            "dealerdirect/phpcodesniffer-composer-installer": true,
             "drupal/core-composer-scaffold": true,
             "drupal/core-project-message": true,
             "drupal/core-recipe-unpack": true,
-            "php-http/discovery": true,
             "drupal/core-vendor-hardening": true,
-            "cweagans/composer-patches": true,
+            "php-http/discovery": true,
             "phpstan/extension-installer": true,
             "tbachert/spi": true
         },
