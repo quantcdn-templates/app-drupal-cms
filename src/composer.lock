@@ -3160,16 +3160,16 @@
         },
         {
             "name": "drupal/core-recipe-unpack",
-            "version": "11.2.8",
+            "version": "11.3.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/drupal/core-recipe-unpack.git",
-                "reference": "7a48dd030f613f0154cb65d3ad68ee95d56383e8"
+                "reference": "bcd7f0416d6197f684bb4f2e52374821e937fb64"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/drupal/core-recipe-unpack/zipball/7a48dd030f613f0154cb65d3ad68ee95d56383e8",
-                "reference": "7a48dd030f613f0154cb65d3ad68ee95d56383e8",
+                "url": "https://api.github.com/repos/drupal/core-recipe-unpack/zipball/bcd7f0416d6197f684bb4f2e52374821e937fb64",
+                "reference": "bcd7f0416d6197f684bb4f2e52374821e937fb64",
                 "shasum": ""
             },
             "require": {
@@ -3198,9 +3198,9 @@
                 "drupal"
             ],
             "support": {
-                "source": "https://github.com/drupal/core-recipe-unpack/tree/11.2.8"
+                "source": "https://github.com/drupal/core-recipe-unpack/tree/11.3.0"
             },
-            "time": "2025-10-28T11:20:27+00:00"
+            "time": "2025-10-28T11:20:22+00:00"
         },
         {
             "name": "drupal/core-recommended",
