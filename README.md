@@ -2,6 +2,20 @@
 
 This template provides a ready-to-deploy [Drupal CMS](https://www.acquia.com/blog/drupal-cms) (formerly Starshot) installation optimized for Quant Cloud.
 
+## Features
+
+- **Drupal CMS Latest**: Based on PHP 8.4 with all required extensions
+- **Composer Managed**: Modern Drupal development with dependency management
+- **Quant Cloud Integration**: Maps Quant Cloud's `DB_*` variables to Drupal standards
+- **Mutable Filesystem Support**: EFS-backed persistent storage at `/opt/drupal/` enables UI-managed updates
+- **UI-Managed Capabilities**: Project Browser, Automatic Updates, Recipes, and a modern admin UI
+- **Production Ready**: Includes proper configuration, security settings, and performance optimizations
+- **Drush Included**: Drupal CLI tool pre-installed and configured
+- **Code Standards**: PHP CodeSniffer with Drupal coding standards supported
+- **CI/CD Integration**: Works with GitHub Actions for automated build and deployment
+- **Multi-Registry Support**: Compatible with GitHub Container Registry and Quant Cloud Registry
+- **Database Ready**: Works with Quant Cloud's managed database service
+
 ## What is Drupal CMS?
 
 Drupal CMS is the next generation of Drupal, designed for **UI-managed workflows**. Key features include:
