@@ -47,7 +47,7 @@ For both deployment options, you can develop locally using either Docker Compose
 ### Option 1: Docker Compose
 
 1. **Clone** your repo (or this template)
-2. **Install dependencies**:
+2. **Configure, start, and install dependencies**:
    ```bash
    cd src && composer install && cd ..
    ```
@@ -111,7 +111,7 @@ The template is pre-configured for Quant Cloud:
 These are automatically provided by Quant Cloud:
 - `DB_HOST` - Database host
 - `DB_PORT` - Database port (default: 3306)
-- `DB_DATABASE` - Database name
+- `DB_DATABASE` - Database name  
 - `DB_USERNAME` - Database username
 - `DB_PASSWORD` - Database password
 
@@ -125,14 +125,14 @@ The template automatically falls back to legacy `MARIADB_*` variables for backwa
 
 ### Redis Caching (Optional)
 
-Redis can significantly improve Drupal CMS performance by providing fast caching. Redis is optional and disabled by default.
+Redis can significantly improve Drupal CMS performance by providing fast caching. Redis is **optional** and disabled by default.
 
 **To enable Redis:**
 1. **Local Development**: Uncomment the Redis section in `docker-compose.override.yml`
 2. **Production**: Set `REDIS_ENABLED=true` in your Quant Cloud environment variables
 3. **Install Redis module**: `composer require drupal/redis` and enable it
 
-If Redis is not available or fails to connect, Drupal will automatically fall back to database caching.
+If Redis is not available or fails to connect, Drupal automatically falls back to database caching.
 
 ### Custom Entrypoints
 
@@ -350,7 +350,7 @@ app-drupal-cms/
 2. Create a feature branch
 3. Make your changes
 4. Test with both local development and Quant Cloud deployment
-5. Check coding standards
+5. See "Code Standards" section above for checking coding standards
 6. Submit a pull request
 
 ## License
@@ -359,6 +359,7 @@ This template is released under the MIT License. See LICENSE file for details.
 
 ## Support
  
+For issues and questions:
 - GitHub Issues: [Create an issue](https://github.com/quantcdn-templates/app-drupal-cms/issues)
 - Documentation: [Quant Cloud Documentation](https://docs.quantcdn.io/)
 - Email: [support@quantcdn.io](mailto:support@quantcdn.io)
