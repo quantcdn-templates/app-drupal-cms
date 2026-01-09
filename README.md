@@ -129,6 +129,32 @@ drush pm:enable module_name
 drush pm:uninstall module_name
 ```
 
+## Code Standards
+
+### Find coding standard issues
+
+**Docker Compose**
+```bash
+docker compose exec drupal-cms vendor/bin/phpcs --standard=Drupal,DrupalPractice src/web/modules/custom src/web/themes/custom
+```
+
+**DDEV**
+```bash
+ddev exec php src/vendor/bin/phpcs --standard=Drupal,DrupalPractice src/web/modules/custom src/web/themes/custom
+```
+
+### Fix coding standards automatically
+
+**Docker Compose**
+```bash
+docker compose exec drupal-cms vendor/bin/phpcbf --standard=Drupal,DrupalPractice src/web/modules/custom src/web/themes/custom
+```
+
+**DDEV**
+```bash
+ddev exec php src/vendor/bin/phpcbf --standard=Drupal,DrupalPractice src/web/modules/custom src/web/themes/custom
+```
+
 ## Important Notes
 
 ### Persistent Volume Required
