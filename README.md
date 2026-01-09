@@ -103,6 +103,25 @@ Standard Drupal database variables are automatically provided by Quant Cloud:
 - `DB_PASSWORD` - Database password
 - `DB_PORT` - Database port (default: 3306)
 
+### Optional Drupal Configuration
+- `DB_PREFIX` - Table prefix (default: none)
+- `DRUPAL_DEBUG` - Enable debug mode (default: `false`)
+- `REDIS_ENABLED` - Enable Redis caching (set to `"true"` to enable)
+- `REDIS_HOST` - Redis server host (default: `redis`)
+
+The template automatically falls back to legacy `MARIADB_*` variables for backward compatibility.
+
+### Redis Caching (Optional)
+
+Redis can significantly improve Drupal CMS performance by providing fast caching. Redis is optional and disabled by default.
+
+**To enable Redis:**
+1. **Local Development**: Uncomment the Redis section in `docker-compose.override.yml`
+2. **Production**: Set `REDIS_ENABLED=true` in your Quant Cloud environment variables
+3. **Install Redis module**: `composer require drupal/redis` and enable it
+
+If Redis is not available or fails to connect, Drupal will automatically fall back to database caching.
+
 ### Custom Entrypoints
 
 Add custom initialization scripts to `.docker/quant/entrypoints/` - they run on container startup.
@@ -168,6 +187,45 @@ docker compose exec drupal-cms vendor/bin/phpcbf --standard=Drupal,DrupalPractic
 ```bash
 ddev exec php src/vendor/bin/phpcbf --standard=Drupal,DrupalPractice src/web/modules/custom src/web/themes/custom
 ```
+
+## Development Workflow
+
+### Adding Custom Modules/Themes
+1. **Add to composer.json** in the `src` folder:
+   ```bash
+   cd src
+   composer require drupal/module_name
+   ```
+
+2. **Enable the module**:
+
+   **Docker Compose**
+   ```bash
+   docker compose exec drupal-cms drush pm:enable module_name
+   ```
+
+   **DDEV**
+   ```bash
+   ddev drush pm:enable module_name
+   ```
+
+3. **Export configuration**:
+
+   **Docker Compose**
+   ```bash
+   docker compose exec drupal-cms drush cex
+   ```
+
+   **DDEV**
+   ```bash
+   ddev drush cex
+   ```
+
+### Managing Configuration
+- Configuration is stored in `src/config/default`
+- Export: `drush cex`
+- Import: `drush cim`
+- Configurations are automatically imported on deployment
 
 ## Important Notes
 
