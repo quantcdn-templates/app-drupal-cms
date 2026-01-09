@@ -79,7 +79,7 @@ For both deployment options, you can develop locally using either Docker Compose
    ```
 5. **Access Drupal** at the provided DDEV URL and run through installation
 6. **Use DDEV Tools**
-DDEV provides additional developer tools like Xdebug, Drush integration, Redis caching, and matches production configuration exactly.
+DDEV provides additional developer tools like Xdebug, Drush integration, Redis caching, and matches production configuration exactly. See `.ddev/README.md` for details.
 
 **Local vs Quant Cloud:**
 
@@ -180,24 +180,24 @@ drush pm:uninstall module_name
 
 **Docker Compose**
 ```bash
-docker compose exec drupal-cms vendor/bin/phpcs --standard=Drupal,DrupalPractice src/web/modules/custom src/web/themes/custom
+docker compose exec drupal-cms vendor/bin/phpcs --standard=./phpcs.xml
 ```
 
 **DDEV**
 ```bash
-ddev exec php src/vendor/bin/phpcs --standard=Drupal,DrupalPractice src/web/modules/custom src/web/themes/custom
+ddev exec php src/vendor/bin/phpcs --standard=src/phpcs.xml
 ```
 
 ### Fix coding standards automatically
 
 **Docker Compose**
 ```bash
-docker compose exec drupal-cms vendor/bin/phpcbf --standard=Drupal,DrupalPractice src/web/modules/custom src/web/themes/custom
+docker compose exec drupal-cms vendor/bin/phpcbf --standard=./phpcs.xml
 ```
 
 **DDEV**
 ```bash
-ddev exec php src/vendor/bin/phpcbf --standard=Drupal,DrupalPractice src/web/modules/custom src/web/themes/custom
+ddev exec php src/vendor/bin/phpcbf --standard=src/phpcs.xml
 ```
 
 ## Development Workflow
@@ -318,7 +318,7 @@ ddev ssh
 ## File Structure
 
 ```
-app-drupal/
+app-drupal-cms/
 ├── Dockerfile                           # Drupal image with PHP extensions
 ├── docker-compose.yml                   # Production/base service definition
 ├── docker-compose.override.yml.example  # Local development overrides template
