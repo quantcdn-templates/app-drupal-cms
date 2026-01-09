@@ -28,30 +28,44 @@ This pattern is similar to the WordPress approach, allowing the application to m
 
 ## Local Development
 
-```bash
-# Install dependencies
-cd src && composer install && cd ..
+For both deployment options, you can develop locally using either Docker Compose or DDEV:
 
-# Copy override file (required for local development)
-cp docker-compose.override.yml.example docker-compose.override.yml
-# Note: This enables testing of entrypoint scripts (like 00-copy-drupal-cms.sh) that 
-# normally run via Quant Cloud's platform wrapper. It also mounts your local src/ 
-# directory for live code changes and disables opcache for faster development.
+### Option 1: Docker Compose
 
-# Start services
-docker compose up -d
+1. **Clone** your repo (or this template)
+2. **Install dependencies**:
+   ```bash
+   cd src && composer install && cd ..
+   ```
+3. **Use overrides** (required for local development):
+   ```bash
+   ls docker-compose.override.yml
+   ```
+   > **Note**: This override enables testing of entrypoint scripts (like `00-copy-drupal-cms.sh`) that normally run via Quant Cloud's platform wrapper. It also mounts your local `src/` directory for live code changes and disables opcache for faster development.
+4. **Start services**:
+   ```bash
+   docker compose up -d
+   ```
+5. **Access Drupal** at http://localhost and run through installation
 
-# Access site
-open http://localhost
+### Option 2: DDEV (Recommended for Developers)
 
-# View logs
-docker compose logs -f drupal-cms
-
-# Access Drush
-docker compose exec drupal-cms drush status
-
-# Shell access
-docker compose exec drupal-cms bash
+1. **Clone** your repo (or this template)
+2. **Install DDEV**: https://ddev.readthedocs.io/en/stable/users/install/
+3. **Configure, start, and install dependencies**:
+   ```bash
+   ddev config --project-type=drupal11 --docroot=src/web
+   ddev start
+   ddev composer install
+   ddev composer drupal:recipe-unpack
+   ```
+4. **Check status**:
+   ```bash
+   ddev status
+   ```
+5. **Access Drupal** at the provided DDEV URL and run through installation
+6. **Use DDEV Tools**
+DDEV provides additional developer tools like Xdebug, Drush integration, Redis caching, and matches production configuration exactly.
 
 ## Deployment to Quant Cloud
 
@@ -83,6 +97,38 @@ Add custom initialization scripts to `.docker/quant/entrypoints/` - they run on 
 
 Customize PHP settings in `.docker/quant/php.ini.d/` - see README.md in that directory.
 
+## Drush Support
+
+This template includes Drush (Drupal CLI) pre-installed and configured.
+
+### Local Development
+
+**Docker Compose**
+```bash
+docker compose exec drupal-cms drush status
+docker compose exec drupal-cms drush cr    # Clear cache
+docker compose exec drupal-cms drush updb  # Update database
+docker compose exec drupal-cms drush cex   # Export configuration
+docker compose exec drupal-cms drush cim   # Import configuration
+```
+
+**DDEV**
+```bash
+ddev drush status
+ddev drush cr    # Clear cache
+ddev drush updb  # Update database
+ddev drush cex   # Export configuration
+ddev drush cim   # Import configuration
+```
+
+### Quant Cloud (via SSH/exec)
+```bash
+drush status
+drush cr
+drush pm:enable module_name
+drush pm:uninstall module_name
+```
+
 ## Important Notes
 
 ### Persistent Volume Required
@@ -111,6 +157,32 @@ When rebuilding containers:
 - Source files in image at `/usr/src/drupal-cms/` are updated
 - Existing persistent volume at `/opt/drupal/` is preserved
 - To start fresh, delete the EFS volume
+
+## Troubleshooting
+
+### Logs
+
+**Docker Compose**
+```bash
+docker compose logs -f drupal-cms
+```
+
+**DDEV**
+```bash
+ddev logs -f
+```
+
+### Accessing the Container
+
+**Docker Compose**
+```bash
+docker compose exec drupal-cms bash
+```
+
+**DDEV**
+```bash
+ddev ssh
+```
 
 ## Learn More
 
