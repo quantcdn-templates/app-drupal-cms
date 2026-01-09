@@ -81,6 +81,18 @@ For both deployment options, you can develop locally using either Docker Compose
 6. **Use DDEV Tools**
 DDEV provides additional developer tools like Xdebug, Drush integration, Redis caching, and matches production configuration exactly.
 
+**Local vs Quant Cloud:**
+
+| Feature | Local Development | Quant Cloud |
+|---------|------------------|-------------|
+| **Database** | MySQL container | Managed RDS |
+| **Environment** | `docker-compose.override.yml` | Platform variables |
+| **Storage** | Local volumes | EFS persistent storage |
+| **Scaling** | Single container | Auto-scaling |
+| **Debug** | Available via settings | Production optimized |
+| **Redis Cache** | Optional (via override) | Optional (via env vars) |
+| **Access** | localhost | Custom domains + CDN |
+
 ## Deployment to Quant Cloud
 
 The template is pre-configured for Quant Cloud:
@@ -95,13 +107,13 @@ The template is pre-configured for Quant Cloud:
 
 ### Environment Variables
 
-Standard Drupal database variables are automatically provided by Quant Cloud:
-
-- `DB_HOST` - Database hostname
+### Database Configuration (Automatic)
+These are automatically provided by Quant Cloud:
+- `DB_HOST` - Database host
+- `DB_PORT` - Database port (default: 3306)
 - `DB_DATABASE` - Database name
 - `DB_USERNAME` - Database username
 - `DB_PASSWORD` - Database password
-- `DB_PORT` - Database port (default: 3306)
 
 ### Optional Drupal Configuration
 - `DB_PREFIX` - Table prefix (default: none)
@@ -303,6 +315,28 @@ docker compose exec drupal-cms bash
 ddev ssh
 ```
 
+## File Structure
+
+```
+app-drupal/
+├── Dockerfile                           # Drupal image with PHP extensions
+├── docker-compose.yml                   # Production/base service definition
+├── docker-compose.override.yml.example  # Local development overrides template
+├── .github/
+│   └── workflows/
+│       ├── build-deploy.yaml            # Quant Cloud ECR deployment
+│       ├── ci.yml                       # GitHub Container Registry (public)
+│       └── test.yaml                    # Code standards testing
+├── src/                                 # Drupal codebase
+│   ├── composer.json                    # PHP dependencies
+│   ├── settings.php                     # Drupal configuration
+│   ├── services.yml                     # Drupal services
+│   └── web/                             # Web root (auto-generated)
+├── quant/
+│   └── meta.json                        # Template metadata
+└── README.md                            # This file
+```
+
 ## Learn More
 
 - [Drupal CMS Official Site](https://new.drupal.org/drupal-cms)
@@ -327,5 +361,4 @@ This template is released under the MIT License. See LICENSE file for details.
  
 - GitHub Issues: [Create an issue](https://github.com/quantcdn-templates/app-drupal-cms/issues)
 - Documentation: [Quant Cloud Documentation](https://docs.quantcdn.io/)
-- Community: [Quant Discord](https://discord.gg/quant)
 - Email: [support@quantcdn.io](mailto:support@quantcdn.io)
