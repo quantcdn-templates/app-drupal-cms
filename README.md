@@ -160,6 +160,27 @@ When rebuilding containers:
 
 ## Troubleshooting
 
+### Common Issues
+
+1. **Database Connection Failed**
+   - Check `DB_HOST`, `DB_USERNAME`, `DB_PASSWORD` values
+   - Verify database service is running (Quant Cloud manages this)
+   - Check network connectivity
+
+2. **Permission Issues**
+   - Ensure `src` folder has proper permissions
+   - Check Docker volume mounts
+
+3. **Module Installation Issues**
+   - Run `composer install` in the `src` directory
+   - Clear Drupal cache: `drush cr`
+   - Check for PHP memory limits
+
+4. **Port Conflicts**
+   - For docker compose, you may see `port is already allocated` errors
+   - If you are running DDEV, turn it off with `ddev poweroff`
+   - If you are running another app, turn it off with `docker compose -p app-name down`
+
 ### Logs
 
 **Docker Compose**
@@ -205,5 +226,8 @@ ddev ssh
 This template is released under the MIT License. See LICENSE file for details.
 
 ## Support
-
-For Quant Cloud support, contact [support@quantcdn.io](mailto:support@quantcdn.io)
+ 
+- GitHub Issues: [Create an issue](https://github.com/quantcdn-templates/app-drupal-cms/issues)
+- Documentation: [Quant Cloud Documentation](https://docs.quantcdn.io/)
+- Community: [Quant Discord](https://discord.gg/quant)
+- Email: [support@quantcdn.io](mailto:support@quantcdn.io)
