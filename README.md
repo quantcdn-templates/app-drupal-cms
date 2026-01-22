@@ -111,7 +111,7 @@ The template is pre-configured for Quant Cloud:
 These are automatically provided by Quant Cloud:
 - `DB_HOST` - Database host
 - `DB_PORT` - Database port (default: 3306)
-- `DB_DATABASE` - Database name  
+- `DB_DATABASE` - Database name
 - `DB_USERNAME` - Database username
 - `DB_PASSWORD` - Database password
 
@@ -358,7 +358,7 @@ app-drupal-cms/
 This template is released under the MIT License. See LICENSE file for details.
 
 ## Support
- 
+
 For issues and questions:
 - GitHub Issues: [Create an issue](https://github.com/quantcdn-templates/app-drupal-cms/issues)
 - Documentation: [Quant Cloud Documentation](https://docs.quantcdn.io/)
