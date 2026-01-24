@@ -3714,16 +3714,16 @@
         },
         {
             "name": "drupal/drupal_cms_analytics",
-            "version": "1.2.4",
+            "version": "1.2.5",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal_cms_analytics.git",
-                "reference": "714e674a59a84c5f4844088cf03eb011be0427ab"
+                "reference": "be1c68d2c01c3933be5c7265cd4c7938018211b2"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_analytics/repository/archive.zip?sha=714e674a59a84c5f4844088cf03eb011be0427ab",
-                "reference": "714e674a59a84c5f4844088cf03eb011be0427ab",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_analytics/repository/archive.zip?sha=be1c68d2c01c3933be5c7265cd4c7938018211b2",
+                "reference": "be1c68d2c01c3933be5c7265cd4c7938018211b2",
                 "shasum": ""
             },
             "require": {
@@ -3733,9 +3733,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Adds recipes for tracking website traffic.",
             "support": {
-                "source": "https://git.drupalcode.org/project/drupal_cms_analytics/-/tree/1.2.4"
+                "source": "https://git.drupalcode.org/project/drupal_cms_analytics/-/tree/1.2.5"
             },
-            "time": "2025-09-04T10:06:53+00:00"
+            "time": "2026-01-02T15:01:15+00:00"
         },
         {
             "name": "drupal/drupal_cms_anti_spam",
@@ -3978,16 +3978,16 @@
         },
         {
             "name": "drupal/drupal_cms_google_analytics",
-            "version": "1.2.8",
+            "version": "1.2.11",
             "source": {
                 "type": "git",
                 "url": "https://git.drupalcode.org/project/drupal_cms_google_analytics.git",
-                "reference": "c9a369fbc95b66efbf99db8cbe69f801cd272233"
+                "reference": "eb02f6ac0a4c173adc44a10eb6178acdf6bb59f4"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_google_analytics/repository/archive.zip?sha=c9a369fbc95b66efbf99db8cbe69f801cd272233",
-                "reference": "c9a369fbc95b66efbf99db8cbe69f801cd272233",
+                "url": "https://git.drupalcode.org/api/v4/projects/project%2Fdrupal_cms_google_analytics/repository/archive.zip?sha=eb02f6ac0a4c173adc44a10eb6178acdf6bb59f4",
+                "reference": "eb02f6ac0a4c173adc44a10eb6178acdf6bb59f4",
                 "shasum": ""
             },
             "require": {
@@ -4002,9 +4002,9 @@
             "notification-url": "https://packagist.org/downloads/",
             "description": "Adds tracking of website traffic using Google Analytics and Google Tag Manager. Requires a Google Tag Manager ID.",
             "support": {
-                "source": "https://git.drupalcode.org/project/drupal_cms_google_analytics/-/tree/1.2.8"
+                "source": "https://git.drupalcode.org/project/drupal_cms_google_analytics/-/tree/1.2.11"
             },
-            "time": "2025-10-16T17:02:18+00:00"
+            "time": "2026-01-19T21:41:22+00:00"
         },
         {
             "name": "drupal/drupal_cms_helper",
