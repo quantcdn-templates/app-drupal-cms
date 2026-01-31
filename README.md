@@ -1,5 +1,7 @@
 # Drupal CMS Template for Quant Cloud
 
+[![Deploy to Quant Cloud](https://www.quantcdn.io/img/quant-deploy-btn-sml.svg)](https://dashboard.quantcdn.io/cloud-apps/create/starter-kit/app-drupal-cms)
+
 This template provides a ready-to-deploy [Drupal CMS](https://www.acquia.com/blog/drupal-cms) (formerly Starshot) installation optimized for Quant Cloud.
 
 ## What is Drupal CMS?
