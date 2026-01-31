@@ -44,8 +44,7 @@ jobs:
         run: |
           # Try to get Drupal CMS version from the built container
           if VERSION=$(docker run --rm drupal-cms-temp:latest drush core-status --field=drupal-version --format=string 2>/dev/null); then
-            echo "Found Drupal CMS version: $VERSION"
-            echo "version=$VERSION" >> $GITHUB_OUTPUT
+            echo "Found Drupal CMS version from drush: $VERSION"
           else
             # Fallback: try to parse from composer.json
             if VERSION=$(docker run --rm drupal-cms-temp:latest php -r "
@@ -57,12 +56,24 @@ jobs:
               }
             " 2>/dev/null); then
               echo "Found Drupal CMS version from composer: $VERSION"
-              echo "version=$VERSION" >> $GITHUB_OUTPUT
             else
               echo "Could not detect Drupal CMS version, using 'latest'"
-              echo "version=latest" >> $GITHUB_OUTPUT
+              VERSION="latest"
             fi
           fi
+
+          # Normalize version to x.y.z format (skip if 'latest')
+          if [ "$VERSION" != "latest" ]; then
+            PARTS=$(echo "$VERSION" | tr '.' '\n' | wc -l)
+            if [ "$PARTS" -eq 1 ]; then
+              VERSION="${VERSION}.0.0"
+            elif [ "$PARTS" -eq 2 ]; then
+              VERSION="${VERSION}.0"
+            fi
+          fi
+
+          echo "Final version: $VERSION"
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Set up image tags
         id: tags
