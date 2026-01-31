@@ -42,33 +42,25 @@ jobs:
       - name: Detect Drupal CMS version
         id: version
         run: |
-          # Try to get Drupal CMS version from the built container
+          # Try to get Drupal CMS version from drush (most accurate)
           if VERSION=$(docker run --rm drupal-cms-temp:latest drush core-status --field=drupal-version --format=string 2>/dev/null); then
             echo "Found Drupal CMS version from drush: $VERSION"
           else
-            # Fallback: try to parse from composer.json
+            # Fallback: get actual installed version from composer.lock
             if VERSION=$(docker run --rm drupal-cms-temp:latest php -r "
-              \$composer = json_decode(file_get_contents('/opt/drupal/composer.json'), true);
-              if (isset(\$composer['require']['drupal/core-recommended'])) {
-                echo preg_replace('/[^0-9.]/', '', \$composer['require']['drupal/core-recommended']);
-              } else if (isset(\$composer['require']['drupal/core'])) {
-                echo preg_replace('/[^0-9.]/', '', \$composer['require']['drupal/core']);
+              \$lock = json_decode(file_get_contents('/opt/drupal/composer.lock'), true);
+              foreach (\$lock['packages'] ?? [] as \$pkg) {
+                if (\$pkg['name'] === 'drupal/core') {
+                  echo preg_replace('/[^0-9.]/', '', \$pkg['version']);
+                  exit;
+                }
               }
-            " 2>/dev/null); then
-              echo "Found Drupal CMS version from composer: $VERSION"
+              echo '0.0.0';
+            " 2>/dev/null) && [ "$VERSION" != "0.0.0" ]; then
+              echo "Found Drupal CMS version from composer.lock: $VERSION"
             else
               echo "Could not detect Drupal CMS version, using 'latest'"
               VERSION="latest"
-            fi
-          fi
-
-          # Normalize version to x.y.z format (skip if 'latest')
-          if [ "$VERSION" != "latest" ]; then
-            PARTS=$(echo "$VERSION" | tr '.' '\n' | wc -l)
-            if [ "$PARTS" -eq 1 ]; then
-              VERSION="${VERSION}.0.0"
-            elif [ "$PARTS" -eq 2 ]; then
-              VERSION="${VERSION}.0"
             fi
           fi
 
