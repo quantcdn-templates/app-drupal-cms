@@ -96,53 +96,58 @@ cat > "$PLACEHOLDER_HTACCESS" <<'HTACCESS'
 HTACCESS
 chown www-data:www-data "$PLACEHOLDER_FILE" "$PLACEHOLDER_HTACCESS"
 echo "[copy-drupal-cms] Placeholder page created"
+echo "[copy-drupal-cms] Starting file copy in background — Apache will start now to serve placeholder..."
 
-# Copy all source files
-echo "[copy-drupal-cms] Copying files from $SOURCE_DIR to $TARGET_DIR..."
-cp -a "$SOURCE_DIR/." "$TARGET_DIR/"
+(
+    # Copy all source files
+    echo "[copy-drupal-cms] Copying files from $SOURCE_DIR to $TARGET_DIR..."
+    cp -a "$SOURCE_DIR/." "$TARGET_DIR/"
 
-# Copy config files to proper locations (mimic composer post-install scripts)
-echo "[copy-drupal-cms] Copying configuration files to web/sites/default..."
-mkdir -p "$TARGET_DIR/web/sites/default"
-cp "$TARGET_DIR/settings.php" "$TARGET_DIR/web/sites/default/settings.php" 2>/dev/null || true
-cp "$TARGET_DIR/services.yml" "$TARGET_DIR/web/sites/default/services.yml" 2>/dev/null || true
-cp "$TARGET_DIR/redis-unavailable.services.yml" "$TARGET_DIR/web/sites/default/redis-unavailable.services.yml" 2>/dev/null || true
+    # Copy config files to proper locations (mimic composer post-install scripts)
+    echo "[copy-drupal-cms] Copying configuration files to web/sites/default..."
+    mkdir -p "$TARGET_DIR/web/sites/default"
+    cp "$TARGET_DIR/settings.php" "$TARGET_DIR/web/sites/default/settings.php" 2>/dev/null || true
+    cp "$TARGET_DIR/services.yml" "$TARGET_DIR/web/sites/default/services.yml" 2>/dev/null || true
+    cp "$TARGET_DIR/redis-unavailable.services.yml" "$TARGET_DIR/web/sites/default/redis-unavailable.services.yml" 2>/dev/null || true
 
-# Validate critical files exist
-MISSING_FILES=0
-if [ ! -f "$TARGET_DIR/web/sites/default/default.settings.php" ]; then
-    echo "[copy-drupal-cms] ⚠️  Missing: web/sites/default/default.settings.php"
-    MISSING_FILES=1
-fi
-if [ ! -f "$TARGET_DIR/web/sites/default/settings.php" ]; then
-    echo "[copy-drupal-cms] ⚠️  Missing: web/sites/default/settings.php"
-    MISSING_FILES=1
-fi
-if [ ! -f "$TARGET_DIR/web/index.php" ]; then
-    echo "[copy-drupal-cms] ⚠️  Missing: web/index.php"
-    MISSING_FILES=1
-fi
-if [ "$MISSING_FILES" -eq 1 ]; then
-    echo "[copy-drupal-cms] ❌ Critical files missing after copy — initialization incomplete"
-    echo "[copy-drupal-cms] Container will retry initialization on next restart"
-    exit 1
-fi
+    # Validate critical files exist
+    MISSING_FILES=0
+    if [ ! -f "$TARGET_DIR/web/sites/default/default.settings.php" ]; then
+        echo "[copy-drupal-cms] ⚠️  Missing: web/sites/default/default.settings.php"
+        MISSING_FILES=1
+    fi
+    if [ ! -f "$TARGET_DIR/web/sites/default/settings.php" ]; then
+        echo "[copy-drupal-cms] ⚠️  Missing: web/sites/default/settings.php"
+        MISSING_FILES=1
+    fi
+    if [ ! -f "$TARGET_DIR/web/index.php" ]; then
+        echo "[copy-drupal-cms] ⚠️  Missing: web/index.php"
+        MISSING_FILES=1
+    fi
+    if [ "$MISSING_FILES" -eq 1 ]; then
+        echo "[copy-drupal-cms] ❌ Critical files missing after copy — initialization incomplete"
+        echo "[copy-drupal-cms] Container will retry initialization on next restart"
+        exit 1
+    fi
 
-# Remove placeholder page now that Drupal's index.php is in place
-# (Apache's DirectoryIndex prefers index.html over index.php)
-rm -f "$PLACEHOLDER_FILE"
-echo "[copy-drupal-cms] Placeholder page removed"
+    # Remove placeholder page now that Drupal's index.php is in place
+    # (Apache's DirectoryIndex prefers index.html over index.php)
+    rm -f "$PLACEHOLDER_FILE"
+    echo "[copy-drupal-cms] Placeholder page removed"
 
-# Set proper ownership
-echo "[copy-drupal-cms] Setting ownership..."
-chown -R www-data:www-data "$TARGET_DIR"
+    # Set proper ownership
+    echo "[copy-drupal-cms] Setting ownership..."
+    chown -R www-data:www-data "$TARGET_DIR"
 
-# Set proper permissions for writable directories
-chmod -R 775 "$TARGET_DIR/web/sites/default/files" 2>/dev/null || true
-chmod 664 "$TARGET_DIR/web/sites/default/settings.php" 2>/dev/null || true
+    # Set proper permissions for writable directories
+    chmod -R 775 "$TARGET_DIR/web/sites/default/files" 2>/dev/null || true
+    chmod 664 "$TARGET_DIR/web/sites/default/settings.php" 2>/dev/null || true
 
-# Mark initialization as complete — only written after everything succeeds
-touch "$MARKER_FILE"
-chown www-data:www-data "$MARKER_FILE"
+    # Mark initialization as complete — only written after everything succeeds
+    touch "$MARKER_FILE"
+    chown www-data:www-data "$MARKER_FILE"
 
-echo "[copy-drupal-cms] ✅ Drupal CMS initialized successfully"
+    echo "[copy-drupal-cms] ✅ Drupal CMS initialized successfully"
+) &
+
+disown
