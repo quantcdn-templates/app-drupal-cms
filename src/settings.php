@@ -943,3 +943,10 @@ if (getenv('REDIS_ENABLED') === 'true') {
   // Redis not enabled - use database cache backend
   $settings['cache']['default'] = 'cache.backend.database';
 }
+
+// Use the Drupal CMS installer profile so the web-based installer shows the
+// recipe wizard (not the standard Drupal installer) if auto-install via drush
+// has not yet run.
+if (InstallerKernel::installationAttempted()) {
+  $settings['install_profile'] = 'drupal_cms_installer';
+}
