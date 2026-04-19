@@ -6,6 +6,7 @@ src/config/
 src/recipes/
 src/web/core/
 src/web/libraries/
-src/web/modules/
+src/web/modules/*
+!src/web/modules/custom/
 src/web/sites/
 src/web/themes/
