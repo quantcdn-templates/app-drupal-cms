@@ -40,7 +40,7 @@
         "drupal/webform": "@beta",
         "drupal/devel": "^5.3",
         "drupal/quantcdn": "^2.0@RC",
-        "drupal/redis": "^1.9",
+        "drupal/redis": "1.11.0",
         "cweagans/composer-patches": "^2@beta"
     },
     "require-dev": {
@@ -81,28 +81,58 @@
         "optimize-autoloader": true
     },
     "extra": {
+        "enable-patching": true,
+        "composer-exit-on-patch-failure": true,
+        "patches": {
+            "drupal/redis": {
+                "Report page: tolerate ElastiCache Serverless (disabled CONFIG / missing INFO fields) [#3443819]": "patches/redis-3443819-report-serverless-safe.patch"
+            }
+        },
         "drupal-scaffold": {
             "locations": {
                 "web-root": "web/"
             }
         },
         "installer-paths": {
-            "web/core": ["type:drupal-core"],
-            "web/libraries/{$name}": ["type:drupal-library"],
-            "web/modules/contrib/{$name}": ["type:drupal-module"],
-            "web/profiles/contrib/{$name}": ["type:drupal-profile"],
-            "web/themes/contrib/{$name}": ["type:drupal-theme"],
-            "./drush/Commands/contrib/{$name}": ["type:drupal-drush"],
-            "web/modules/custom/{$name}": ["type:drupal-custom-module"],
-            "web/profiles/custom/{$name}": ["type:drupal-custom-profile"],
-            "./recipes/{$name}": ["type:drupal-recipe"],
-            "web/themes/custom/{$name}": ["type:drupal-custom-theme"]
+            "web/core": [
+                "type:drupal-core"
+            ],
+            "web/libraries/{$name}": [
+                "type:drupal-library"
+            ],
+            "web/modules/contrib/{$name}": [
+                "type:drupal-module"
+            ],
+            "web/profiles/contrib/{$name}": [
+                "type:drupal-profile"
+            ],
+            "web/themes/contrib/{$name}": [
+                "type:drupal-theme"
+            ],
+            "./drush/Commands/contrib/{$name}": [
+                "type:drupal-drush"
+            ],
+            "web/modules/custom/{$name}": [
+                "type:drupal-custom-module"
+            ],
+            "web/profiles/custom/{$name}": [
+                "type:drupal-custom-profile"
+            ],
+            "./recipes/{$name}": [
+                "type:drupal-recipe"
+            ],
+            "web/themes/custom/{$name}": [
+                "type:drupal-custom-theme"
+            ]
         },
         "drupal-core-project-message": {
-            "include-keys": ["homepage", "support"],
+            "include-keys": [
+                "homepage",
+                "support"
+            ],
             "post-create-project-cmd-message": [
                 "<bg=blue;fg=white>                                                   </>",
-                "<bg=blue;fg=white>  Congratulations, you’ve installed Drupal CMS!    </>",
+                "<bg=blue;fg=white>  Congratulations, you\u2019ve installed Drupal CMS!    </>",
                 "<bg=blue;fg=white>                                                   </>",
                 "",
                 "<bg=yellow;fg=black>Next steps</>:",
