@@ -7,6 +7,11 @@ ENV DOCUMENT_ROOT=/opt/drupal/web
 # Set working directory to Drupal root (parent of web/)
 WORKDIR /opt/drupal
 
+# cweagans/composer-patches 2 applies patches with git. The base image ships
+# `patch` but not `git`, and without it every patch fails with "No available
+# patcher was able to apply patch".
+RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
+
 # Copy dependency files and required config files first (changes occasionally)
 COPY src/composer.json src/composer.lock* src/settings.php src/services.yml src/redis-unavailable.services.yml ./
 
