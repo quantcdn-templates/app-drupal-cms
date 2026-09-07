@@ -99,55 +99,63 @@ echo "[copy-drupal-cms] Placeholder page created"
 echo "[copy-drupal-cms] Starting file copy in background — Apache will start now to serve placeholder..."
 
 (
-    # Copy all source files
-    echo "[copy-drupal-cms] Copying files from $SOURCE_DIR to $TARGET_DIR..."
-    cp -a "$SOURCE_DIR/." "$TARGET_DIR/"
+    # Copy into a staging directory on the same volume, then move entries into
+    # place. Apache keeps serving the placeholder until web/ is swapped in as the
+    # very last step, so no request can hit index.php before vendor/ exists.
+    STAGE="$TARGET_DIR/.incoming"
+    rm -rf "$STAGE"
+    mkdir -p "$STAGE"
 
-    # Copy config files to proper locations (mimic composer post-install scripts)
+    # EFS costs a network round trip per file operation, so a sequential cp -a of
+    # ~41k files takes minutes. Create directories first, then copy files with
+    # many parallel workers; EFS scales with concurrency. cp -a keeps the
+    # www-data ownership baked into the image, so no chown -R pass is needed.
+    echo "[copy-drupal-cms] Copying files from $SOURCE_DIR to $STAGE (parallel)..."
+    START_TS=$(date +%s)
+    ( cd "$SOURCE_DIR" && find . -mindepth 1 -type d -print0 \
+        | xargs -0 -P 32 -n 200 sh -c 'for d; do mkdir -p "$0/$d"; done' "$STAGE" )
+    ( cd "$SOURCE_DIR" && find . \( -type f -o -type l \) -print0 \
+        | xargs -0 -P 32 -n 100 cp -a --parents -t "$STAGE" )
+    echo "[copy-drupal-cms] Copy finished in $(( $(date +%s) - START_TS ))s"
+
     echo "[copy-drupal-cms] Copying configuration files to web/sites/default..."
-    mkdir -p "$TARGET_DIR/web/sites/default"
-    cp "$TARGET_DIR/settings.php" "$TARGET_DIR/web/sites/default/settings.php" 2>/dev/null || true
-    cp "$TARGET_DIR/services.yml" "$TARGET_DIR/web/sites/default/services.yml" 2>/dev/null || true
-    cp "$TARGET_DIR/redis-unavailable.services.yml" "$TARGET_DIR/web/sites/default/redis-unavailable.services.yml" 2>/dev/null || true
+    mkdir -p "$STAGE/web/sites/default"
+    cp "$STAGE/settings.php" "$STAGE/web/sites/default/settings.php" 2>/dev/null || true
+    cp "$STAGE/services.yml" "$STAGE/web/sites/default/services.yml" 2>/dev/null || true
+    cp "$STAGE/redis-unavailable.services.yml" "$STAGE/web/sites/default/redis-unavailable.services.yml" 2>/dev/null || true
 
-    # Validate critical files exist
     MISSING_FILES=0
-    if [ ! -f "$TARGET_DIR/web/sites/default/default.settings.php" ]; then
-        echo "[copy-drupal-cms] ⚠️  Missing: web/sites/default/default.settings.php"
-        MISSING_FILES=1
-    fi
-    if [ ! -f "$TARGET_DIR/web/sites/default/settings.php" ]; then
-        echo "[copy-drupal-cms] ⚠️  Missing: web/sites/default/settings.php"
-        MISSING_FILES=1
-    fi
-    if [ ! -f "$TARGET_DIR/web/index.php" ]; then
-        echo "[copy-drupal-cms] ⚠️  Missing: web/index.php"
-        MISSING_FILES=1
-    fi
+    for f in web/sites/default/default.settings.php web/sites/default/settings.php web/index.php vendor/autoload.php; do
+        if [ ! -f "$STAGE/$f" ]; then
+            echo "[copy-drupal-cms] ⚠️  Missing: $f"
+            MISSING_FILES=1
+        fi
+    done
     if [ "$MISSING_FILES" -eq 1 ]; then
         echo "[copy-drupal-cms] ❌ Critical files missing after copy — initialization incomplete"
         echo "[copy-drupal-cms] Container will retry initialization on next restart"
         exit 1
     fi
 
-    # Remove placeholder page now that Drupal's index.php is in place
-    # (Apache's DirectoryIndex prefers index.html over index.php)
-    rm -f "$PLACEHOLDER_FILE"
-    echo "[copy-drupal-cms] Placeholder page removed"
+    chmod -R 775 "$STAGE/web/sites/default/files" 2>/dev/null || true
+    chmod 664 "$STAGE/web/sites/default/settings.php" 2>/dev/null || true
 
-    # Set proper ownership
-    echo "[copy-drupal-cms] Setting ownership..."
-    chown -R www-data:www-data "$TARGET_DIR"
+    # Move everything except web/ into place first, then swap web/ in last.
+    echo "[copy-drupal-cms] Moving files into place..."
+    for entry in "$STAGE"/* "$STAGE"/.[!.]*; do
+        [ -e "$entry" ] || continue
+        name=$(basename "$entry")
+        [ "$name" = "web" ] && continue
+        rm -rf "${TARGET_DIR:?}/$name"
+        mv "$entry" "$TARGET_DIR/$name"
+    done
+    mv "$TARGET_DIR/web" "$TARGET_DIR/.web-placeholder"
+    mv "$STAGE/web" "$TARGET_DIR/web"
+    rm -rf "$TARGET_DIR/.web-placeholder" "$STAGE"
+    echo "[copy-drupal-cms] Placeholder page replaced by the real site"
 
-    # Set proper permissions for writable directories
-    chmod -R 775 "$TARGET_DIR/web/sites/default/files" 2>/dev/null || true
-    chmod 664 "$TARGET_DIR/web/sites/default/settings.php" 2>/dev/null || true
-
-    # Mark initialization as complete — only written after everything succeeds
     touch "$MARKER_FILE"
     chown www-data:www-data "$MARKER_FILE"
-
     echo "[copy-drupal-cms] ✅ Drupal CMS initialized successfully"
 ) &
-
 disown
