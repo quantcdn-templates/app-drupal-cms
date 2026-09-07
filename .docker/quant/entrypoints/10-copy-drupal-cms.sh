@@ -118,6 +118,10 @@ echo "[copy-drupal-cms] Starting file copy in background — Apache will start n
         | xargs -0 -P 32 -n 100 cp -a --parents -t "$STAGE" )
     echo "[copy-drupal-cms] Copy finished in $(( $(date +%s) - START_TS ))s"
 
+    # settings.php points config_sync_directory at ../config/default; create it
+    # so drush does not report it missing on every deploy.
+    mkdir -p "$STAGE/config/default"
+
     echo "[copy-drupal-cms] Copying configuration files to web/sites/default..."
     mkdir -p "$STAGE/web/sites/default"
     cp "$STAGE/settings.php" "$STAGE/web/sites/default/settings.php" 2>/dev/null || true
