@@ -107,6 +107,13 @@ To disable UI updates, add to `settings.php`:
 $settings['allow_authorize_operations'] = FALSE;
 ```
 
+### Settings files
+
+- `settings.php` lives on the volume. You can edit it, and the container never overwrites your edits.
+- `settings.quant.php` ships in the image at `/usr/src/drupal-cms/`. It holds platform settings: database, trusted hosts, reverse proxy and cache. Each deploy updates it, so changes reach running environments.
+- `settings.php` includes `settings.quant.php`. Add your own settings below the include to override the platform values. Patterns you add to `trusted_host_patterns` are kept.
+- If an older volume has a `settings.php` without the include, the container appends it at the end of the file on the next start.
+
 ### Container Rebuilds
 
 When rebuilding containers:
