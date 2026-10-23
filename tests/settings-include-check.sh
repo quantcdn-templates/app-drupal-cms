@@ -4,7 +4,7 @@
 set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 SCRIPT="$ROOT/.docker/quant/entrypoints/11-ensure-settings-include.sh"
-T="$(mktemp -d)"; trap 'rm -rf "$T"' EXIT
+T="$(mktemp -d)"; trap 'chmod -R u+w "$T" 2>/dev/null; rm -rf "$T"' EXIT
 FAILED=0
 fail() { echo "FAIL: $*"; FAILED=1; }
 
@@ -66,6 +66,36 @@ cmp -s "$V/web/sites/default/settings.php" "$T/edited.php" || fail "touched befo
 # Idempotent on the replaced legacy volume.
 run "$T/a" >/dev/null
 cmp -s "$T/a/web/sites/default/settings.php" "$IMG/settings.php" || fail "second run changed (a)"
+
+# (f) Unwritable sites/default (non-root): the script must exit 0 and leave settings.php alone.
+if [ "$(id -u)" != 0 ]; then
+    for kind in edited legacy; do
+        V="$T/f-$kind"; new_volume "$V" "$T/$kind.php"; S="$V/web/sites/default/settings.php"
+        chmod 555 "$V/web/sites/default"
+        RC=0; OUT="$(run "$V")" || RC=$?
+        [ "$RC" = 0 ] || fail "(f/$kind) exited $RC on an unwritable directory"
+        cmp -s "$S" "$T/$kind.php" || fail "(f/$kind) settings.php changed on a failed write"
+        ls "$V/web/sites/default" | grep -q 'tmp' && fail "(f/$kind) temp file left behind"
+        echo "$OUT" | grep -qi 'warning' || fail "(f/$kind) no warning logged"
+        chmod 755 "$V/web/sites/default"
+    done
+fi
+
+# (g) Without php, the new settings.php is not reported as unmigrated.
+V="$T/g"; new_volume "$V" "$IMG/settings.php"; S="$V/web/sites/default/settings.php"
+NOPHP="$T/nophp-bin"; mkdir -p "$NOPHP"
+for t in bash cp chmod mv rm cmp grep cut stat sha256sum shasum cat dirname basename mktemp command; do
+    p="$(command -v "$t" 2>/dev/null || true)"; [ -n "$p" ] && [ -x "$p" ] && ln -sf "$p" "$NOPHP/$t"
+done
+OUT="$(PATH="$NOPHP" run "$V")"
+[ -e "$S.quant-new" ] && fail "(g) false quant-new without php"
+echo "$OUT" | grep -qi 'warning' && fail "(g) false warning without php"
+
+# (h) quant-new is rewritten only when it differs.
+V="$T/h"; new_volume "$V" "$T/edited.php"; S="$V/web/sites/default/settings.php"
+run "$V" >/dev/null; touch -t 202001010000 "$S.quant-new"
+run "$V" >/dev/null
+[ "$(stat -f %m "$S.quant-new" 2>/dev/null || stat -c %Y "$S.quant-new")" -lt 1700000000 ] || fail "(h) quant-new rewritten when identical"
 
 # 5. The shipped thin settings.php loads the platform file and keeps customer hosts.
 OUT="$(php -r '
