@@ -28,7 +28,6 @@ services:
       quant.type: none  # Don't deploy to Quant Cloud
 
 volumes:
+  # On Quant Cloud every named volume is persistent storage shared by all tasks.
   drupal_cms:
-    labels:
-      quant.volume.type: efs  # Use EFS for shared persistent storage in Quant Cloud
   mysql_data:
