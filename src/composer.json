@@ -39,7 +39,7 @@
         "drupal/recipe_installer_kit": "^1-alpha6@alpha",
         "drupal/webform": "@beta",
         "drupal/devel": "^5.3",
-        "drupal/quantcdn": "^2.0@RC",
+        "drupal/quantcdn": "^2.0",
         "drupal/redis": "1.11.0",
         "cweagans/composer-patches": "^2@beta"
     },

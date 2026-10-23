@@ -13,7 +13,7 @@ WORKDIR /opt/drupal
 RUN apt-get update && apt-get install -y --no-install-recommends git && rm -rf /var/lib/apt/lists/*
 
 # Copy dependency files and required config files first (changes occasionally)
-COPY src/composer.json src/composer.lock* src/settings.php src/services.yml src/redis-unavailable.services.yml ./
+COPY src/composer.json src/composer.lock* src/settings.php src/settings.quant.php src/services.yml src/redis-unavailable.services.yml ./
 
 # Copy composer patches BEFORE install so cweagans/composer-patches can find + apply them.
 COPY src/patches ./patches

@@ -106,9 +106,9 @@ echo "[copy-drupal-cms] Starting file copy in background — Apache will start n
     rm -rf "$STAGE"
     mkdir -p "$STAGE"
 
-    # EFS costs a network round trip per file operation, so a sequential cp -a of
+    # A shared filesystem costs a network round trip per file operation, so a sequential cp -a of
     # ~41k files takes minutes. Create directories first, then copy files with
-    # many parallel workers; EFS scales with concurrency. cp -a keeps the
+    # many parallel workers; a shared filesystem scales with concurrency. cp -a keeps the
     # www-data ownership baked into the image, so no chown -R pass is needed.
     echo "[copy-drupal-cms] Copying files from $SOURCE_DIR to $STAGE (parallel)..."
     START_TS=$(date +%s)
