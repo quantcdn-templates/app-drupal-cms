@@ -1,6 +1,9 @@
+# Quant Cloud: run on ARM64 to match the arm64 images the org builds.
+x-quant-labels:
+  quant.architecture: ARM64
+
 services:
   drupal-cms:
-    image: ghcr.io/quantcdn-templates/app-drupal-cms:latest
     build: .
     ports:
      - "80:80"
@@ -25,7 +28,6 @@ services:
       quant.type: none  # Don't deploy to Quant Cloud
 
 volumes:
+  # On Quant Cloud every named volume is persistent storage shared by all tasks.
   drupal_cms:
-    labels:
-      quant.volume.type: efs  # Use EFS for shared persistent storage in Quant Cloud
   mysql_data:

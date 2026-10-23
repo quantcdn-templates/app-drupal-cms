@@ -21,10 +21,10 @@ Unlike traditional Drupal deployments with immutable containers, **Drupal CMS re
 ### How It Works
 
 1. **Container Image** - Contains Drupal CMS source at `/usr/src/drupal-cms/`
-2. **Persistent Volume** - EFS volume mounted at `/opt/drupal/`
+2. **Persistent Volume** - Shared filesystem volume mounted at `/opt/drupal/`
 3. **First Boot** - Entrypoint script copies source files to volume if empty
 4. **Subsequent Boots** - Uses existing files from persistent volume
-5. **UI Updates** - Module installs, updates, and Recipe applications persist to EFS
+5. **UI Updates** - Module installs, updates, and Recipe applications persist to shared filesystem
 
 This pattern is similar to the WordPress approach, allowing the application to manage itself while maintaining container-based deployment.
 
@@ -60,7 +60,7 @@ docker compose exec drupal-cms bash
 The template is pre-configured for Quant Cloud:
 
 - ✅ ARM64-optimized builds
-- ✅ EFS-backed persistent volume for `/opt/drupal/`
+- ✅ Shared-filesystem-backed persistent volume for `/opt/drupal/`
 - ✅ Environment-specific builds (dev vs production)
 - ✅ Automatic redeployment on git push
 - ✅ Database syncing between environments
@@ -89,7 +89,7 @@ Customize PHP settings in `.docker/quant/php.ini.d/` - see README.md in that dir
 
 ### Persistent Volume Required
 
-The entire `/opt/drupal/` directory must be persistent (EFS in Quant Cloud) to support:
+The entire `/opt/drupal/` directory must be persistent (shared filesystem in Quant Cloud) to support:
 - UI-based module/theme installation
 - Automatic updates
 - Recipe applications
@@ -107,12 +107,19 @@ To disable UI updates, add to `settings.php`:
 $settings['allow_authorize_operations'] = FALSE;
 ```
 
+### Settings files
+
+- `settings.php` lives on the volume. You can edit it, and the container never overwrites a file you edited.
+- `settings.quant.php` ships in the image at `/usr/src/drupal-cms/`. It holds platform settings: database, trusted hosts, reverse proxy and cache. Each deploy updates it, so changes reach running environments.
+- `settings.php` includes `settings.quant.php`. Add your own settings below the include to override the platform values. Patterns you add to `trusted_host_patterns` are kept.
+- Older volumes: if `settings.php` is exactly a version this template shipped, the container replaces it with the new one. If you changed it, the container does NOT modify it. It writes `settings.php.quant-new` next to it and logs a warning on every start. To migrate, copy your own settings into `settings.php.quant-new` below the include, then rename it to `settings.php`. Until you do, platform settings changes (for example trusted hosts) do not reach that environment.
+
 ### Container Rebuilds
 
 When rebuilding containers:
 - Source files in image at `/usr/src/drupal-cms/` are updated
 - Existing persistent volume at `/opt/drupal/` is preserved
-- To start fresh, delete the EFS volume
+- To start fresh, delete the shared filesystem volume
 
 ## Learn More
 
