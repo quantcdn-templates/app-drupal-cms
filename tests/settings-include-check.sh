@@ -93,7 +93,7 @@ echo "$OUT" | grep -qi 'warning' && fail "(g) false warning without php"
 
 # (h) quant-new is rewritten only when it differs.
 V="$T/h"; new_volume "$V" "$T/edited.php"; S="$V/web/sites/default/settings.php"
-run "$V" >/dev/null; touch -t 202001010000 "$S.quant-new"
+run "$V" >/dev/null; touch -t "2020${PAD:-}0101${PAD:-}0000" "$S.quant-new"
 run "$V" >/dev/null
 [ "$(stat -f %m "$S.quant-new" 2>/dev/null || stat -c %Y "$S.quant-new")" -lt 1700000000 ] || fail "(h) quant-new rewritten when identical"
 
