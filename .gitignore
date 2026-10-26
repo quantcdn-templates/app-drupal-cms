@@ -11,3 +11,7 @@ src/web/modules/*
 src/web/sites/
 src/web/themes/
 src/private/
+
+# Local agent planning notes (never commit)
+docs/plans/
+docs/superpowers/
