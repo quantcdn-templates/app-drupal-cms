@@ -15,6 +15,13 @@ echo "[copy-drupal-cms] Checking if Drupal CMS needs to be initialized..."
 # (e.g., if a previous boot was killed mid-copy).
 if [ -f "$MARKER_FILE" ]; then
     echo "[copy-drupal-cms] ✅ Drupal CMS already initialized (persistent volume detected)"
+    # Volumes initialised before the private files path existed lack the directory.
+    if [ ! -d "$TARGET_DIR/private" ]; then
+        mkdir -p "$TARGET_DIR/private"
+        chown www-data:www-data "$TARGET_DIR/private"
+        chmod 750 "$TARGET_DIR/private"
+        echo "[copy-drupal-cms] Created $TARGET_DIR/private for Drupal private files"
+    fi
     exit 0
 fi
 
@@ -121,6 +128,11 @@ echo "[copy-drupal-cms] Starting file copy in background — Apache will start n
     # settings.php points config_sync_directory at ../config/default; create it
     # so drush does not report it missing on every deploy.
     mkdir -p "$STAGE/config/default"
+
+    # Private files (file_private_path in settings.quant.php), outside the docroot.
+    mkdir -p "$STAGE/private"
+    chown www-data:www-data "$STAGE/private"
+    chmod 750 "$STAGE/private"
 
     echo "[copy-drupal-cms] Copying configuration files to web/sites/default..."
     mkdir -p "$STAGE/web/sites/default"

@@ -577,8 +577,12 @@ $settings['reverse_proxy_trusted_headers'] = \Symfony\Component\HttpFoundation\R
  *
  * See https://www.drupal.org/documentation/modules/file for more information
  * about securing private files.
+ *
+ * On Quant Cloud this resolves to /opt/drupal/private on the persistent
+ * volume, outside the docroot. Set DRUPAL_PRIVATE_PATH on an environment to
+ * override it, or set file_private_path below the include in settings.php.
  */
-# $settings['file_private_path'] = '';
+$settings['file_private_path'] = getenv('DRUPAL_PRIVATE_PATH') ?: dirname($app_root) . '/private';
 
 /**
  * Temporary file path:

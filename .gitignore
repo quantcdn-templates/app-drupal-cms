@@ -10,3 +10,4 @@ src/web/modules/*
 !src/web/modules/custom/
 src/web/sites/
 src/web/themes/
+src/private/

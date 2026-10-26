@@ -114,12 +114,30 @@ $settings['allow_authorize_operations'] = FALSE;
 - `settings.php` includes `settings.quant.php`. Add your own settings below the include to override the platform values. Patterns you add to `trusted_host_patterns` are kept.
 - Older volumes: if `settings.php` is exactly a version this template shipped, the container replaces it with the new one. If you changed it, the container does NOT modify it. It writes `settings.php.quant-new` next to it and logs a warning on every start. To migrate, copy your own settings into `settings.php.quant-new` below the include, then rename it to `settings.php`. Until you do, platform settings changes (for example trusted hosts) do not reach that environment.
 
+### Private files
+
+The private file system (`private://`) lives at `/opt/drupal/private`. It is on the persistent volume, so it survives redeploys and is included in Quant Cloud filesystem backups. It is outside the docroot (`/opt/drupal/web`), so Apache never serves it.
+
+- `settings.quant.php` sets `file_private_path`. Set `DRUPAL_PRIVATE_PATH` on an environment to change it, or set `$settings['file_private_path']` below the include in `settings.php`.
+- The container creates the directory at start, including on volumes initialised before this setting existed. Run `drush cr` once after the deploy so Drupal registers `private://`.
+- An environment whose `settings.php` does not include `settings.quant.php` yet (see "Older volumes" above) does not get the setting until you migrate it.
+- Never point `file_private_path` at a directory under `sites/default/files`. That is the public files directory.
+- Use Quant Cloud backups for the database and files. Do not schedule modules such as backup_migrate to write database dumps into `private://`.
+
 ### Container Rebuilds
 
 When rebuilding containers:
 - Source files in image at `/usr/src/drupal-cms/` are updated
 - Existing persistent volume at `/opt/drupal/` is preserved
 - To start fresh, delete the shared filesystem volume
+
+### Local MySQL and TLS
+
+If `mysql`, `mysqldump` or Drush fails locally with `ERROR 2026 (HY000): TLS/SSL error: self-signed certificate in certificate chain`:
+
+- The base image's MariaDB client verifies the server certificate by default, and the local MySQL container uses a self-signed one. Drupal itself (PDO) still connects.
+- The override mounts `.docker/mysql-local.cnf` (`skip-ssl` for the CLI clients) and sets the `DRUSH_COMMAND_*_OPTIONS_EXTRA` variables (Drush passes its own `--defaults-file`). Copy both from `docker-compose.override.yml.example` if your override predates them.
+- This is local only. On Quant Cloud the clients verify the managed database certificate.
 
 ## Learn More
 
