@@ -4,6 +4,7 @@ x-quant-labels:
 
 services:
   drupal-cms:
+    image: ghcr.io/quantcdn-templates/app-drupal-cms:latest
     build: .
     ports:
      - "80:80"
