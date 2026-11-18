@@ -1,6 +1,3 @@
-# Lock files (generated during build)
-src/composer.lock
-
 src/vendor/
 src/config/
 src/recipes/
