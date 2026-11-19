@@ -28,7 +28,7 @@
         "drupal/drupal_cms_blog": "^1.2",
         "drupal/drupal_cms_case_study": "^1.2",
         "drupal/drupal_cms_events": "^1.2",
-        "drupal/drupal_cms_forms": "^1.2",
+        "drupal/drupal_cms_forms": "^2.2",
         "drupal/drupal_cms_news": "^1.2",
         "drupal/drupal_cms_page": "^1.2",
         "drupal/drupal_cms_person": "^1.2",
