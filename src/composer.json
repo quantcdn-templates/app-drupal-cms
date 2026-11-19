@@ -22,7 +22,7 @@
         "drupal/core-project-message": "^11.2",
         "drupal/core-recipe-unpack": "^11.2",
         "drupal/core-recommended": "^11.2",
-        "drupal/drupal_cms_accessibility_tools": "^1.2",
+        "drupal/drupal_cms_accessibility_tools": "^2.2",
         "drupal/drupal_cms_ai": "^1.2",
         "drupal/drupal_cms_analytics": "^1.2",
         "drupal/drupal_cms_blog": "^1.2",
